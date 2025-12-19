@@ -1,11 +1,11 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.model.SearchQuery;
-import java.util.List;
+// import com.example.demo.model.SearchQuery;
+// import java.util.List;
 
-public interface SearchQueryService {
+// public interface SearchQueryService {
 
-    List<SearchQuery> getQueriesForUser(Long userId);
+//     List<SearchQuery> getQueriesForUser(Long userId);
 
-    SearchQuery getQueryById(Long id);
-}
+//     SearchQuery getQueryById(Long id);
+// }
