@@ -18,4 +18,19 @@ public class SearchQueryServiceImpl implements SearchQueryService {
     public void recordSearch(SearchQueryRecord record) {
         repository.save(record);
     }
+    @Override
+public List<Employee> searchEmployeesBySkills(List<String> skills, Long userId) {
+    return List.of(); // temp
+}
+
+@Override
+public SearchQuery getQueryById(Long id) {
+    return repository.findById(id).orElseThrow();
+}
+
+@Override
+public List<SearchQuery> getQueriesForUser(Long userId) {
+    return repository.findAll();
+}
+
 }
