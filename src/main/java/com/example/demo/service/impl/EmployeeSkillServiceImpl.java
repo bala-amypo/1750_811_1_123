@@ -1,3 +1,13 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.model.EmployeeSkill;
+import com.example.demo.repository.EmployeeSkillRepository;
+import com.example.demo.service.EmployeeSkillService;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
@@ -30,8 +40,8 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
     @Override
     public void deactivateEmployeeSkill(Long id) {
-        EmployeeSkill es = repository.findById(id).orElseThrow();
-        es.setActive(false);
-        repository.save(es);
+        EmployeeSkill skill = repository.findById(id).orElseThrow();
+        skill.setActive(false);
+        repository.save(skill);
     }
 }
