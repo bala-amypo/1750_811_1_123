@@ -1,5 +1,6 @@
 package com.example.demo.security.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
@@ -18,5 +19,22 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
     }
 }
