@@ -1,5 +1,5 @@
 package com.example.demo.controller;
-
+import com.example.demo.model.User;
 import com.example.demo.dto.AuthLoginRequest;
 import com.example.demo.dto.AuthRegisterRequest;
 import com.example.demo.dto.AuthResponse;
