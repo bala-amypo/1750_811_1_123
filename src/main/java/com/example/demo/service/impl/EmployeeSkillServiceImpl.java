@@ -1,34 +1,37 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.model.Employee;
-import com.example.demo.model.EmployeeSkill;
-import com.example.demo.repository.EmployeeSkillRepository;
-import com.example.demo.service.EmployeeSkillService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
 @Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
-    private final EmployeeSkillRepository employeeSkillRepository;
+    private final EmployeeSkillRepository repository;
 
-    public EmployeeSkillServiceImpl(EmployeeSkillRepository employeeSkillRepository) {
-        this.employeeSkillRepository = employeeSkillRepository;
+    public EmployeeSkillServiceImpl(EmployeeSkillRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public EmployeeSkill add(EmployeeSkill employeeSkill) {
-        return employeeSkillRepository.save(employeeSkill);
+    public EmployeeSkill createEmployeeSkill(EmployeeSkill skill) {
+        return repository.save(skill);
     }
 
     @Override
-    public List<EmployeeSkill> getByEmployee(Long employeeId) {
-        return employeeSkillRepository.findByEmployeeIdAndActiveTrue(employeeId);
+    public EmployeeSkill updateEmployeeSkill(Long id, EmployeeSkill skill) {
+        skill.setId(id);
+        return repository.save(skill);
     }
 
     @Override
-    public List<Employee> searchEmployees(List<String> skills, Long userId) {
-        return employeeSkillRepository.findEmployeesByAllSkillNames(skills, userId);
+    public List<EmployeeSkill> getSkillsForEmployee(Long employeeId) {
+        return repository.findByEmployeeId(employeeId);
+    }
+
+    @Override
+    public List<EmployeeSkill> getEmployeesBySkill(Long skillId) {
+        return repository.findBySkillId(skillId);
+    }
+
+    @Override
+    public void deactivateEmployeeSkill(Long id) {
+        EmployeeSkill es = repository.findById(id).orElseThrow();
+        es.setActive(false);
+        repository.save(es);
     }
 }
