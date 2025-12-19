@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,42 +11,37 @@ import java.util.List;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeRepository repository;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public EmployeeServiceImpl(EmployeeRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public Employee create(Employee employee) {
-        return employeeRepository.save(employee);
+    public Employee createEmployee(Employee employee) {
+        return repository.save(employee);
     }
 
     @Override
-    public Employee getById(Long id) {
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    public Employee updateEmployee(Long id, Employee employee) {
+        employee.setId(id);
+        return repository.save(employee);
     }
 
     @Override
-    public List<Employee> getAllActive() {
-        return employeeRepository.findByActiveTrue();
+    public Employee getEmployeeById(Long id) {
+        return repository.findById(id).orElseThrow();
     }
 
     @Override
-    public Employee update(Long id, Employee employee) {
-        Employee existing = getById(id);
-        existing.setFullName(employee.getFullName());
-        existing.setDepartment(employee.getDepartment());
-        existing.setJobTitle(employee.getJobTitle());
-        existing.setActive(employee.getActive());
-        return employeeRepository.save(existing);
+    public List<Employee> getAllEmployees() {
+        return repository.findAll();
     }
 
     @Override
-    public void delete(Long id) {
-        Employee employee = getById(id);
-        employee.setActive(false);
-        employeeRepository.save(employee);
+    public void deactivateEmployee(Long id) {
+        Employee emp = repository.findById(id).orElseThrow();
+        emp.setActive(false);
+        repository.save(emp);
     }
 }
