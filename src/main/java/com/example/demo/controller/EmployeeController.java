@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Employee;
 import com.example.demo.service.EmployeeService;
@@ -9,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
-
+    @Autowired
     private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {

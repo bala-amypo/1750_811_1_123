@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.example.demo.entity.SkillCategory;
 import com.example.demo.service.SkillCategoryService;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class SkillCategoryController {
 
+    @Autowired
     private final SkillCategoryService skillCategoryService;
 
     public SkillCategoryController(SkillCategoryService skillCategoryService) {

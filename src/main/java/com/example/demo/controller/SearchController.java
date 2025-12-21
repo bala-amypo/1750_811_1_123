@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.entity.Employee;
 import com.example.demo.entity.SearchQueryRecord;
@@ -10,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
-
+    @Autowired
     private final SearchQueryService searchQueryService;
 
     public SearchController(SearchQueryService searchQueryService) {
