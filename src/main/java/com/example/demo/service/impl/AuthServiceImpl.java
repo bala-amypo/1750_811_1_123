@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.dto.AuthRegisterRequest;
 import com.example.demo.dto.AuthLoginRequest;
 import com.example.demo.dto.AuthResponse;
