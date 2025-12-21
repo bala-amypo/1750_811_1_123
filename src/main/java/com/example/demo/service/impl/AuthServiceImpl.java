@@ -1,14 +1,15 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.dto.AuthRegisterRequest;
 import com.example.demo.dto.AuthLoginRequest;
+import com.example.demo.dto.AuthRegisterRequest;
 import com.example.demo.dto.AuthResponse;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.security.JwtService;   // ✅ THIS LINE
 import com.example.demo.service.AuthService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AuthServiceImpl implements AuthService {
