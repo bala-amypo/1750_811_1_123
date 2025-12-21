@@ -1,28 +1,61 @@
-// package com.example.demo.service.impl;
+package com.example.demo.service.impl;
 
-// import com.example.demo.model.SearchQuery;
-// import com.example.demo.repository.SearchQueryRepository;
-// import com.example.demo.service.SearchQueryService;
-// import org.springframework.stereotype.Service;
+import com.example.demo.entity.Employee;
+import com.example.demo.entity.SearchQueryRecord;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.EmployeeSkillRepository;
+import com.example.demo.repository.SearchQueryRecordRepository;
+import com.example.demo.service.SearchQueryService;
+import org.springframework.stereotype.Service;
 
-// import java.util.List;
+import java.util.List;
+import java.util.stream.Collectors;
 
-// @Service
-// public class SearchQueryServiceImpl implements SearchQueryService {
+@Service
+public class SearchQueryServiceImpl implements SearchQueryService {
 
-//     private final SearchQueryRepository repository;
+    private final SearchQueryRecordRepository searchQueryRecordRepository;
+    private final EmployeeSkillRepository employeeSkillRepository;
 
-//     public SearchQueryServiceImpl(SearchQueryRepository repository) {
-//         this.repository = repository;
-//     }
+    public SearchQueryServiceImpl(SearchQueryRecordRepository searchQueryRecordRepository,
+                                  EmployeeSkillRepository employeeSkillRepository) {
+        this.searchQueryRecordRepository = searchQueryRecordRepository;
+        this.employeeSkillRepository = employeeSkillRepository;
+    }
 
-//     @Override
-//     public List<SearchQuery> getQueriesForUser(Long userId) {
-//         return repository.findByUserId(userId);
-//     }
+    @Override
+    public SearchQueryRecord saveQuery(SearchQueryRecord query) {
+        return searchQueryRecordRepository.save(query);
+    }
 
-//     @Override
-//     public SearchQuery getQueryById(Long id) {
-//         return repository.findById(id).orElse(null);
-//     }
-// }
+    @Override
+    public List<Employee> searchEmployeesBySkills(List<String> skills, Long userId) {
+
+        if (skills == null || skills.isEmpty()) {
+            throw new IllegalArgumentException("must not be empty");
+        }
+
+        List<Employee> employees =
+                employeeSkillRepository.findEmployeesByAllSkillNames(skills, skills.size());
+
+        SearchQueryRecord record = new SearchQueryRecord();
+        record.setSearcherId(userId);
+        record.setSkillsRequested(String.join(",", skills));
+        record.setResultsCount(employees.size());
+
+        searchQueryRecordRepository.save(record);
+
+        return employees;
+    }
+
+    @Override
+    public SearchQueryRecord getQueryById(Long id) {
+        return searchQueryRecordRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Search query not found"));
+    }
+
+    @Override
+    public List<SearchQueryRecord> getQueriesForUser(Long userId) {
+        return searchQueryRecordRepository.findBySearcherId(userId);
+    }
+}
