@@ -1,6 +1,7 @@
-// Contains REST API endpoints
-// Handles HTTP requests (GET, POST, PUT, DELETE)
-// Connects client requests to service layer
+
+// Represents database tables
+// Uses JPA annotations like @Entity, @Id
+// Stores data structure
 
 package com.example.demo.entity;
 

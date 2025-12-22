@@ -1,3 +1,6 @@
+// Handles HTTP requests (GET, POST, PUT, DELETE)
+// Connects client requests to service layer
+
 package com.example.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 

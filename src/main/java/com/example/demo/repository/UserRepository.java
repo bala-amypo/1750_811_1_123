@@ -1,3 +1,8 @@
+// Interface layer for database operations
+// Uses Spring Data JPA
+// Communicates with database (CRUD operations)
+
+
 package com.example.demo.repository;
 
 import com.example.demo.entity.User;

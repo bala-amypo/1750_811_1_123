@@ -1,3 +1,6 @@
+// contains business logic of the application
+// Validates data and applies rules
+// Decides how the application works
 package com.example.demo.service;
 
 import com.example.demo.entity.Skill;
