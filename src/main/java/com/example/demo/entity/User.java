@@ -1,3 +1,7 @@
+// Contains REST API endpoints
+// Handles HTTP requests (GET, POST, PUT, DELETE)
+// Connects client requests to service layer
+
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
@@ -22,7 +26,6 @@ public class User {
     @Column(nullable = false)
     private String role = "USER";
 
-    // Getters and Setters
 
     public Long getId() {
         return id;
