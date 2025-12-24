@@ -7,22 +7,22 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class JwtTokenProvider {
 
-    private static final String SECRET_KEY = "mySecretKey123";
+    private final String SECRET = "secret123";
 
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public String getUsernameFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(SECRET)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -30,7 +30,7 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
