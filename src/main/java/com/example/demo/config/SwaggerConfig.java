@@ -19,7 +19,7 @@ public class SwaggerConfig {
                         .version("1.0")
                         .description("API for managing employee skills matrix"))
                 .servers(List.of(
-                        new Server().url("https://9185.408procr.amypo.ai/")
+                        new Server().url("https://9308.pro604cr.amypo.ai/")
                 ));
     }
 }
