@@ -13,7 +13,6 @@ public class SearchQueryRecord {
 
     private Long searcherId;
 
-    @Column(nullable = false)
     private String skillsRequested;
 
     private long resultsCount = 0;
@@ -26,41 +25,18 @@ public class SearchQueryRecord {
         this.resultsCount = 0;
     }
 
-    // Getters and Setters
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getSearcherId() { return searcherId; }
+    public void setSearcherId(Long searcherId) { this.searcherId = searcherId; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getSkillsRequested() { return skillsRequested; }
+    public void setSkillsRequested(String skillsRequested) { this.skillsRequested = skillsRequested; }
 
-    public Long getSearcherId() {
-        return searcherId;
-    }
+    public long getResultsCount() { return resultsCount; }
+    public void setResultsCount(long resultsCount) { this.resultsCount = resultsCount; }
 
-    public void setSearcherId(Long searcherId) {
-        this.searcherId = searcherId;
-    }
-
-    public String getSkillsRequested() {
-        return skillsRequested;
-    }
-
-    public void setSkillsRequested(String skillsRequested) {
-        this.skillsRequested = skillsRequested;
-    }
-
-    public long getResultsCount() {
-        return resultsCount;
-    }
-
-    public void setResultsCount(long resultsCount) {
-        this.resultsCount = resultsCount;
-    }
-
-    public LocalDateTime getSearchedAt() {
-        return searchedAt;
-    }
+    public LocalDateTime getSearchedAt() { return searchedAt; }
 }

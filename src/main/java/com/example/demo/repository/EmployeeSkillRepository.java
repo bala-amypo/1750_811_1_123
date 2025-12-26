@@ -1,9 +1,10 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Employee;
 import com.example.demo.model.EmployeeSkill;
+import com.example.demo.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -14,14 +15,14 @@ public interface EmployeeSkillRepository extends JpaRepository<EmployeeSkill, Lo
     List<EmployeeSkill> findBySkillIdAndActiveTrue(Long skillId);
 
     @Query("""
-        SELECT es.employee
+        SELECT DISTINCT es.employee
         FROM EmployeeSkill es
-        WHERE LOWER(es.skill.name) IN :skillNames
+        WHERE es.skill.name IN :skills
         GROUP BY es.employee
-        HAVING COUNT(DISTINCT LOWER(es.skill.name)) = :skillCount
+        HAVING COUNT(DISTINCT es.skill.name) = :count
     """)
     List<Employee> findEmployeesByAllSkillNames(
-            List<String> skillNames,
-            Long skillCount
+            @Param("skills") List<String> skills,
+            @Param("count") Long count
     );
 }
