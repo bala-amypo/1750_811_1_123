@@ -1,24 +1,42 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.SkillCategoryDTO;
 import com.example.demo.model.SkillCategory;
 import com.example.demo.repository.SkillCategoryRepository;
 import com.example.demo.service.SkillCategoryService;
-import org.springframework.stereotype.Service;
 
-@Service
+import java.util.List;
+
 public class SkillCategoryServiceImpl implements SkillCategoryService {
 
-    private final SkillCategoryRepository categoryRepository;
+    private final SkillCategoryRepository skillCategoryRepository;
 
-    public SkillCategoryServiceImpl(SkillCategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public SkillCategoryServiceImpl(SkillCategoryRepository skillCategoryRepository) {
+        this.skillCategoryRepository = skillCategoryRepository;
     }
 
     @Override
-    public SkillCategory createCategory(SkillCategoryDTO dto) {
-        SkillCategory category = new SkillCategory();
-        category.setName(dto.getName());
-        return categoryRepository.save(category);
+    public SkillCategory createCategory(SkillCategory category) {
+        category.setActive(true);
+        return skillCategoryRepository.save(category);
+    }
+
+    @Override
+    public SkillCategory getCategoryById(Long id) {
+        return skillCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+    }
+
+    @Override
+    public List<SkillCategory> getAllCategories() {
+        return skillCategoryRepository.findAll();
+    }
+
+    @Override
+    public void deactivateCategory(Long id) {
+        SkillCategory category = skillCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        category.setActive(false);
+        skillCategoryRepository.save(category);
     }
 }

@@ -1,12 +1,11 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
-import org.springframework.stereotype.Service;
 
-@Service
+import java.util.List;
+
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
@@ -16,10 +15,38 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee createEmployee(EmployeeDTO dto) {
-        Employee emp = new Employee();
-        emp.setName(dto.getName());
-        emp.setDesignation(dto.getDesignation());
-        return employeeRepository.save(emp);
+    public Employee createEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee updateEmployee(Long id, Employee updatedEmployee) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        existing.setFullName(updatedEmployee.getFullName());
+        existing.setEmail(updatedEmployee.getEmail());
+
+        return employeeRepository.save(existing);
+    }
+
+    @Override
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
+
+    @Override
+    public void deactivateEmployee(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        employee.setActive(false);
+        employeeRepository.save(employee);
     }
 }

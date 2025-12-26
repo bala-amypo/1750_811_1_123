@@ -1,12 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.SkillDTO;
 import com.example.demo.model.Skill;
 import com.example.demo.service.SkillService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/skills")
+@RequestMapping("/api/skills")
 public class SkillController {
 
     private final SkillService skillService;
@@ -16,7 +17,28 @@ public class SkillController {
     }
 
     @PostMapping
-    public Skill createSkill(@RequestBody SkillDTO dto) {
-        return skillService.createSkill(dto);
+    public Skill createSkill(@RequestBody Skill skill) {
+        return skillService.createSkill(skill);
+    }
+
+    @PutMapping("/{id}")
+    public Skill updateSkill(@PathVariable Long id,
+                             @RequestBody Skill skill) {
+        return skillService.updateSkill(id, skill);
+    }
+
+    @GetMapping("/{id}")
+    public Skill getSkill(@PathVariable Long id) {
+        return skillService.getSkillById(id);
+    }
+
+    @GetMapping
+    public List<Skill> getAllSkills() {
+        return skillService.getAllSkills();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deactivateSkill(@PathVariable Long id) {
+        skillService.deactivateSkill(id);
     }
 }
