@@ -7,6 +7,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!--  Spring Boot Parent (Manages Versions) -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -20,27 +21,21 @@
     <packaging>jar</packaging>
 
     <name>Employee Skills Matrix</name>
-    <description>Spring Boot + TestNG Project</description>
 
-    <!-- ===================== -->
-    <!-- PROPERTIES -->
-    <!-- ===================== -->
     <properties>
         <java.version>17</java.version>
     </properties>
 
-    <!-- ===================== -->
-    <!-- DEPENDENCIES -->
-    <!-- ===================== -->
+    <!-- ================= DEPENDENCIES ================= -->
     <dependencies>
 
-        <!-- Spring Boot Core -->
+        <!-- Spring Core -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Spring Web (Servlet tests need this) -->
+        <!-- Spring Web (Servlet tests) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -48,6 +43,7 @@
 
         <!-- ================= TESTING ================= -->
 
+        <!--  TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -55,27 +51,29 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito -->
+        <!-- Mockito Core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <!--  Mockito Inline (VERSION REQUIRED) -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
+            <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Test utilities -->
+        <!-- Spring Test Utilities -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- JWT (required by your JwtTokenProvider tests) -->
+        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -96,9 +94,7 @@
 
     </dependencies>
 
-    <!-- ===================== -->
-    <!-- BUILD -->
-    <!-- ===================== -->
+    <!-- ================= BUILD ================= -->
     <build>
         <plugins>
 
@@ -113,6 +109,7 @@
                 </configuration>
             </plugin>
 
+            <!-- TestNG Runner -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
