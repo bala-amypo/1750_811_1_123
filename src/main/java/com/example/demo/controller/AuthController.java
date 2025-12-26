@@ -2,42 +2,53 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.LoginResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final EmployeeRepository employeeRepository;
-    private final JwtTokenProvider tokenProvider;
 
-    public AuthController(EmployeeRepository employeeRepository, JwtTokenProvider tokenProvider) {
+    public AuthController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
-        this.tokenProvider = tokenProvider;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    // Signup new employee
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody Employee employee) {
+        Optional<Employee> existingEmployee = employeeRepository.findByEmail(employee.getEmail());
 
-        // Check if employee exists by email
-        Optional<Employee> employeeOpt = employeeRepository.findByEmail(loginRequest.getEmail());
-
-        if (employeeOpt.isEmpty()) {
-            return ResponseEntity.status(401).body(new LoginResponse("Invalid credentials", null));
+        if (existingEmployee.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Email already registered");
         }
 
-        Employee emp = employeeOpt.get();
+        employeeRepository.save(employee);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Signup successful");
+    }
 
-        // For simplicity, assuming password matches if email exists (you can extend with actual password check)
-        String token = tokenProvider.generateToken(emp.getId(), emp.getEmail(), "USER");
+    // Login employee
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
+        Optional<Employee> employee = employeeRepository.findByEmail(email);
 
-        LoginResponse response = new LoginResponse("Success", token);
-        return ResponseEntity.ok(response);
+        if (employee.isPresent()) {
+            // Simple password check (store encrypted in real apps)
+            if (employee.get().getPassword().equals(password)) {
+                return ResponseEntity.ok("Login successful");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Invalid password");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Employee not found");
+        }
     }
 }
