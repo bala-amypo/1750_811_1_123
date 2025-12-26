@@ -1,23 +1,33 @@
 package com.example.demo.dto;
 
+import java.util.List;
+
 public class EmployeeSearchRequest {
 
-    private String skill;
-    private String proficiency;
+    private List<String> skills;
+    private Long searcherId;
 
-    public String getSkill() {
-        return skill;
+    public EmployeeSearchRequest() {
     }
 
-    public void setSkill(String skill) {
-        this.skill = skill;
+    public EmployeeSearchRequest(List<String> skills, Long searcherId) {
+        this.skills = skills;
+        this.searcherId = searcherId;
     }
 
-    public String getProficiency() {
-        return proficiency;
+    public List<String> getSkills() {
+        return skills;
     }
 
-    public void setProficiency(String proficiency) {
-        this.proficiency = proficiency;
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
+
+    public Long getSearcherId() {
+        return searcherId;
+    }
+
+    public void setSearcherId(Long searcherId) {
+        this.searcherId = searcherId;
     }
 }
