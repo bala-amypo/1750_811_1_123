@@ -2,6 +2,8 @@ package com.example.demo.repository;
 
 import com.example.demo.model.EmployeeSkill;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,4 +12,11 @@ import java.util.List;
 public interface EmployeeSkillRepository extends JpaRepository<EmployeeSkill, Long> {
 
     List<EmployeeSkill> findByEmployeeId(Long employeeId);
+
+    @Query("SELECT es FROM EmployeeSkill es WHERE es.skill.id = :skillId")
+    List<EmployeeSkill> findBySkillId(@Param("skillId") Long skillId);
+
+    @Query("SELECT es FROM EmployeeSkill es JOIN es.skill s WHERE s.name IN :skillNames AND es.employee.id = :employeeId")
+    List<EmployeeSkill> findEmployeesByAllSkillNames(@Param("skillNames") List<String> skillNames,
+                                                     @Param("employeeId") long employeeId);
 }
