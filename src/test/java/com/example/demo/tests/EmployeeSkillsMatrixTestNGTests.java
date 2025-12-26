@@ -1,5 +1,5 @@
 
-package com.example.demo;
+package com.example.demo.tests;
 
 import com.example.demo.model.Employee;
 import com.example.demo.model.EmployeeSkill;
