@@ -8,24 +8,23 @@ public class EmployeeSkill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private boolean active = true;
-
     @ManyToOne
-    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "skill_id")
     private Skill skill;
 
-    // getters
-    public Long getId() { return id; }
-    public boolean isActive() { return active; }
-    public Employee getEmployee() { return employee; }
-    public Skill getSkill() { return skill; }
+    private boolean active;
+    private int yearsOfExperience;
 
-    // setters
+    public boolean getActive() { return active; }
+    public int getYearsOfExperience() { return yearsOfExperience; }
     public void setActive(boolean active) { this.active = active; }
+    public void setYearsOfExperience(int yearsOfExperience) { this.yearsOfExperience = yearsOfExperience; }
+
+    public Employee getEmployee() { return employee; }
     public void setEmployee(Employee employee) { this.employee = employee; }
+
+    public Skill getSkill() { return skill; }
     public void setSkill(Skill skill) { this.skill = skill; }
 }

@@ -10,10 +10,6 @@ public class SkillCategory {
 
     private String name;
 
-    // getters
-    public Long getId() { return id; }
     public String getName() { return name; }
-
-    // setters
     public void setName(String name) { this.name = name; }
 }

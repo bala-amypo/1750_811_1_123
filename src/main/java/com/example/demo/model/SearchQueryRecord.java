@@ -9,11 +9,11 @@ public class SearchQueryRecord {
     private Long id;
 
     private String query;
+    private Long searcherId;
 
-    // getters
-    public Long getId() { return id; }
     public String getQuery() { return query; }
-
-    // setters
     public void setQuery(String query) { this.query = query; }
+
+    public Long getSearcherId() { return searcherId; }
+    public void setSearcherId(Long searcherId) { this.searcherId = searcherId; }
 }
