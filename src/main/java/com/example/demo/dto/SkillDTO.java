@@ -1,33 +1,12 @@
 package com.example.demo.dto;
 
 public class SkillDTO {
-    private Long id;
     private String name;
-    private Boolean active;
+    private boolean active;
 
-    public SkillDTO() {}
-
-    public SkillDTO(Long id, String name, Boolean active) {
-        this.id = id;
-        this.name = name;
-        this.active = active;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
+    // Getters and Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
-
-    @Override
-    public String toString() {
-        return "SkillDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", active=" + active +
-                '}';
-    }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }
