@@ -3,7 +3,6 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "employee_skills")
 public class EmployeeSkill {
 
     @Id
@@ -11,20 +10,16 @@ public class EmployeeSkill {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "skill_id")
     private Skill skill;
 
-    private String proficiencyLevel;
+    private int rating;     // <- add this field
 
-    private int yearsOfExperience;
+    private Boolean active; // <- add this field to track active/inactive
 
-    private Boolean active = true;
-
-    // Getters & Setters
+    // getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -34,11 +29,8 @@ public class EmployeeSkill {
     public Skill getSkill() { return skill; }
     public void setSkill(Skill skill) { this.skill = skill; }
 
-    public String getProficiencyLevel() { return proficiencyLevel; }
-    public void setProficiencyLevel(String proficiencyLevel) { this.proficiencyLevel = proficiencyLevel; }
-
-    public int getYearsOfExperience() { return yearsOfExperience; }
-    public void setYearsOfExperience(int yearsOfExperience) { this.yearsOfExperience = yearsOfExperience; }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }

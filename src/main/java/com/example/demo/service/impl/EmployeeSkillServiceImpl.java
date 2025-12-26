@@ -4,8 +4,8 @@ import com.example.demo.model.Employee;
 import com.example.demo.model.Skill;
 import com.example.demo.model.EmployeeSkill;
 import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.repository.EmployeeSkillRepository;
 import com.example.demo.repository.SkillRepository;
+import com.example.demo.repository.EmployeeSkillRepository;
 import com.example.demo.service.EmployeeSkillService;
 import org.springframework.stereotype.Service;
 
@@ -34,25 +34,21 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
     @Override
     public EmployeeSkill assignSkillToEmployee(Long employeeId, Long skillId, int rating) {
-        Optional<Employee> employeeOpt = employeeRepository.findById(employeeId);
-        Optional<Skill> skillOpt = skillRepository.findById(skillId);
+        Employee emp = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
-        if (employeeOpt.isPresent() && skillOpt.isPresent()) {
-            Employee emp = employeeOpt.get();
-            Skill skill = skillOpt.get();
+        Skill skill = skillRepository.findById(skillId)
+                .orElseThrow(() -> new IllegalArgumentException("Skill not found"));
 
-            // Check if employee is active
-            if(emp.getActive() != null && emp.getActive()) {
-                EmployeeSkill employeeSkill = new EmployeeSkill();
-                employeeSkill.setEmployee(emp);
-                employeeSkill.setSkill(skill);
-                employeeSkill.setRating(rating);
-                return employeeSkillRepository.save(employeeSkill);
-            } else {
-                throw new IllegalStateException("Employee is not active");
-            }
+        if(emp.getActive() != null && emp.getActive()) {
+            EmployeeSkill employeeSkill = new EmployeeSkill();
+            employeeSkill.setEmployee(emp);
+            employeeSkill.setSkill(skill);
+            employeeSkill.setRating(rating); // <- ensure EmployeeSkill has rating field
+            employeeSkill.setActive(true);   // optional: track active/inactive
+            return employeeSkillRepository.save(employeeSkill);
         } else {
-            throw new IllegalArgumentException("Employee or Skill not found");
+            throw new IllegalStateException("Employee is not active");
         }
     }
 
@@ -64,5 +60,13 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     @Override
     public List<EmployeeSkill> getSkillsByEmployee(Long employeeId) {
         return employeeSkillRepository.findByEmployeeId(employeeId);
+    }
+
+    @Override
+    public void deactivateEmployeeSkill(Long employeeSkillId) {
+        EmployeeSkill empSkill = employeeSkillRepository.findById(employeeSkillId)
+                .orElseThrow(() -> new IllegalArgumentException("EmployeeSkill not found"));
+        empSkill.setActive(false);
+        employeeSkillRepository.save(empSkill);
     }
 }
