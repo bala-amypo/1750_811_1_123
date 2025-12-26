@@ -3,7 +3,7 @@
 
     <test name="AllTests">
         <packages>
-            <package name="com.example.demo.tests"/>
+            <package name="/home/coder/Workspace/demo/src/test/java/com/example/demo/EmployeeSkillsMatrixTestNGTests.java"/>
         </packages>
     </test>
 
