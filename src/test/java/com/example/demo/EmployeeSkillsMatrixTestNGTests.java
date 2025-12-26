@@ -1,57 +1,22 @@
 package com.example.demo;
- 
-import org.testng.ITestListener;
-import org.testng.ITestResult;
- 
-public class TestResultListener implements ITestListener {
- 
-    @Override
-    public void onTestSuccess(ITestResult result) {
-        System.out.println(result.getMethod().getMethodName() + " - PASS");
-    }
- 
-    @Override
-    public void onTestFailure(ITestResult result) {
-        System.out.println(result.getMethod().getMethodName() + " - FAIL");
-    }
- 
-    @Override
-    public void onTestSkipped(ITestResult result) {
-        System.out.println(result.getMethod().getMethodName() + " - SKIP");
-    }
-}
 
-
-
-
-package com.example.demo;
-
-import com.example.demo.model.Employee;
-import com.example.demo.model.EmployeeSkill;
-import com.example.demo.model.SearchQueryRecord;
-import com.example.demo.model.Skill;
-import com.example.demo.model.SkillCategory;
-import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.repository.SearchQueryRecordRepository;
+import com.example.demo.TestResultListener;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.service.EmployeeService;
-import com.example.demo.service.EmployeeSkillService;
-import com.example.demo.service.SearchQueryService;
-import com.example.demo.service.SkillCategoryService;
-import com.example.demo.service.SkillService;
-import com.example.demo.service.impl.EmployeeServiceImpl;
-import com.example.demo.service.impl.EmployeeSkillServiceImpl;
-import com.example.demo.service.impl.SearchQueryServiceImpl;
-import com.example.demo.service.impl.SkillCategoryServiceImpl;
-import com.example.demo.service.impl.SkillServiceImpl;
+import com.example.demo.service.*;
+import com.example.demo.service.impl.*;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.test.util.ReflectionTestUtils;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
@@ -65,6 +30,7 @@ import java.util.*;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
 @Listeners(TestResultListener.class)
 public class EmployeeSkillsMatrixTestNGTests {
 
