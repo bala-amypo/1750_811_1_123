@@ -1,8 +1,0 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Employee Skill Matrix Suite">
-    <test name="TestNG Tests">
-        <classes>
-            <class name="com.example.demo.EmployeeSkillsMatrixTestNGTests"/>
-        </classes>
-    </test>
-</suite>
