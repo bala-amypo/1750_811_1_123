@@ -1,38 +1,31 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.SkillCategory;
-import com.example.demo.repository.SkillCategoryRepository;
+import com.example.demo.service.SkillCategoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 public class SkillCategoryController {
 
-    private final SkillCategoryRepository skillCategoryRepository;
+    private final SkillCategoryService skillCategoryService;
 
-    public SkillCategoryController(SkillCategoryRepository skillCategoryRepository) {
-        this.skillCategoryRepository = skillCategoryRepository;
+    public SkillCategoryController(SkillCategoryService skillCategoryService) {
+        this.skillCategoryService = skillCategoryService;
     }
 
-    // ➕ Add new skill category
+    // POST - create category
     @PostMapping
-    public SkillCategory addCategory(@RequestBody SkillCategory category) {
-        return skillCategoryRepository.save(category);
+    public ResponseEntity<SkillCategory> createCategory(@RequestBody SkillCategory category) {
+        return ResponseEntity.ok(skillCategoryService.createCategory(category));
     }
 
-    // 📄 Get all categories
+    // GET - list categories
     @GetMapping
-    public List<SkillCategory> getAllCategories() {
-        return skillCategoryRepository.findAll();
-    }
-
-    // 🔍 Get category by name
-    @GetMapping("/{name}")
-    public SkillCategory getByName(@PathVariable String name) {
-        return skillCategoryRepository
-                .findByCategoryName(name)
-                .orElse(null);
+    public ResponseEntity<List<SkillCategory>> getAllCategories() {
+        return ResponseEntity.ok(skillCategoryService.getAllCategories());
     }
 }

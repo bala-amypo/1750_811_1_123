@@ -3,40 +3,34 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository repo;
+    private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeRepository repo) {
-        this.repo = repo;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
-    public Employee save(Employee employee) {
-        return repo.save(employee);
+    @Override
+    public Employee createEmployee(Employee employee) {
+        if (employee.getEmail() == null || employee.getEmail().isBlank()) {
+            throw new IllegalArgumentException("Email must not be empty");
+        }
+        return employeeRepository.save(employee);
     }
 
-    public Employee getById(Long id) {
-        return repo.findById(id).orElseThrow();
+    @Override
+    public Employee updateEmployee(Long id, Employee employee) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        existing.setFullName(employee.getFullName());
+        existing.setEmail(employee.getEmail());
+        return employeeRepository.save(existing);
     }
 
-    public List<Employee> getAll() {
-        return repo.findAll();
-    }
-
-    public Employee update(Long id, Employee employee) {
-        Employee e = getById(id);
-        e.setFullName(employee.getFullName());
-        e.setDepartment(employee.getDepartment());
-        e.setJobTitle(employee.getJobTitle());
-        return repo.save(e);
-    }
-
-    public void delete(Long id) {
-        repo.deleteById(id);
-    }
-}
+    @Override
+    publ
