@@ -1,54 +1,43 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AuthRequestDTO;
+import com.example.demo.dto.AuthResponseDTO;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Employee;
-import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
+    private final JwtTokenProvider tokenProvider;
 
-    public AuthController(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public AuthController(EmployeeService employeeService, JwtTokenProvider tokenProvider) {
+        this.employeeService = employeeService;
+        this.tokenProvider = tokenProvider;
     }
 
-    // Signup new employee
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody Employee employee) {
-        Optional<Employee> existingEmployee = employeeRepository.findByEmail(employee.getEmail());
-
-        if (existingEmployee.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Email already registered");
-        }
-
-        employeeRepository.save(employee);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Signup successful");
-    }
-
-    // Login employee
+    // Login endpoint
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password) {
-        Optional<Employee> employee = employeeRepository.findByEmail(email);
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request) {
+        Employee employee = employeeService.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Employee", "email", request.getEmail()));
 
-        if (employee.isPresent()) {
-            // Simple password check (store encrypted in real apps)
-            if (employee.get().getPassword().equals(password)) {
-                return ResponseEntity.ok("Login successful");
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Invalid password");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Employee not found");
-        }
+        // Here you can add password validation if you store passwords
+        // For demo purposes, we assume email existence is sufficient
+
+        String token = tokenProvider.generateToken(employee.getId(), employee.getEmail(), "USER");
+        AuthResponseDTO response = new AuthResponseDTO();
+        response.setToken(token);
+        response.setEmail(employee.getEmail());
+        response.setUserId(employee.getId());
+        response.setRole("USER");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
