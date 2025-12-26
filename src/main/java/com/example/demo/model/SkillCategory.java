@@ -3,22 +3,17 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "skill_categories")
 public class SkillCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String categoryName;
+    private String name;
 
-    private Boolean active = true;
-
-    // Getters and Setters
+    // getters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getCategoryName() { return categoryName; }
-    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public String getName() { return name; }
+
+    // setters
+    public void setName(String name) { this.name = name; }
 }
