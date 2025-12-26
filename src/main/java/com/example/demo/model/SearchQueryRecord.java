@@ -11,51 +11,56 @@ public class SearchQueryRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String searchType;   // Skill / Category / Skill+Level
+    private Long searcherId;
 
-    private String searchValue;  // Java / Backend / Backend-Expert
+    @Column(nullable = false)
+    private String skillsRequested;
+
+    private long resultsCount = 0;
 
     private LocalDateTime searchedAt;
 
-    public SearchQueryRecord() {
+    @PrePersist
+    public void onCreate() {
         this.searchedAt = LocalDateTime.now();
+        this.resultsCount = 0;
     }
 
-    public SearchQueryRecord(String searchType, String searchValue) {
-        this.searchType = searchType;
-        this.searchValue = searchValue;
-        this.searchedAt = LocalDateTime.now();
-    }
+    // Getters and Setters
 
     public Long getId() {
         return id;
-    }
-
-    public String getSearchType() {
-        return searchType;
-    }
-
-    public String getSearchValue() {
-        return searchValue;
-    }
-
-    public LocalDateTime getSearchedAt() {
-        return searchedAt;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setSearchType(String searchType) {
-        this.searchType = searchType;
+    public Long getSearcherId() {
+        return searcherId;
     }
 
-    public void setSearchValue(String searchValue) {
-        this.searchValue = searchValue;
+    public void setSearcherId(Long searcherId) {
+        this.searcherId = searcherId;
     }
 
-    public void setSearchedAt(LocalDateTime searchedAt) {
-        this.searchedAt = searchedAt;
+    public String getSkillsRequested() {
+        return skillsRequested;
+    }
+
+    public void setSkillsRequested(String skillsRequested) {
+        this.skillsRequested = skillsRequested;
+    }
+
+    public long getResultsCount() {
+        return resultsCount;
+    }
+
+    public void setResultsCount(long resultsCount) {
+        this.resultsCount = resultsCount;
+    }
+
+    public LocalDateTime getSearchedAt() {
+        return searchedAt;
     }
 }
