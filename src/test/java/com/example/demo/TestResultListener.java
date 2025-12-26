@@ -17,6 +17,6 @@ public class TestResultListener implements ITestListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        System.out.println(result.getMethod().getMethodName() + " - SKIP");
+        System.out.println(result.getMethod().getMethodName() + " - SKIPPED");
     }
 }
