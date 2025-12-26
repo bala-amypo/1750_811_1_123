@@ -8,7 +8,8 @@ import com.example.demo.service.SearchQueryService;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.springframework.stereotype.Service;
+@Service
 public class SearchQueryServiceImpl implements SearchQueryService {
 
     private final SearchQueryRecordRepository searchQueryRecordRepository;

@@ -5,7 +5,8 @@ import com.example.demo.repository.SkillCategoryRepository;
 import com.example.demo.service.SkillCategoryService;
 
 import java.util.List;
-
+import org.springframework.stereotype.Service;
+@Service
 public class SkillCategoryServiceImpl implements SkillCategoryService {
 
     private final SkillCategoryRepository skillCategoryRepository;
