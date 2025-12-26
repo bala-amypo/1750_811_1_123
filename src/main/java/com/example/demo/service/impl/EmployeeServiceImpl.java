@@ -1,10 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.service.EmployeeService;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -16,23 +16,34 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Employee createEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee updateEmployee(Long id, Employee employee) {
+        Employee existing = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        existing.setFullName(employee.getFullName());
+        existing.setEmail(employee.getEmail());
+        return employeeRepository.save(existing);
+    }
+
+    @Override
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+    }
+
+    @Override
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
     @Override
-    public Employee getEmployeeById(Long id) {
-        Optional<Employee> employee = employeeRepository.findById(id);
-        return employee.orElse(null);
-    }
-
-    @Override
-    public Employee saveEmployee(Employee employee) {
-        return employeeRepository.save(employee);
-    }
-
-    @Override
-    public void deleteEmployee(Long id) {
-        employeeRepository.deleteById(id);
+    public void deactivateEmployee(Long id) {
+        Employee existing = getEmployeeById(id);
+        existing.setActive(false);
+        employeeRepository.save(existing);
     }
 }
