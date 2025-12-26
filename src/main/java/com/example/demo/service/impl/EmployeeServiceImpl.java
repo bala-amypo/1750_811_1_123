@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
@@ -16,16 +17,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee createEmployee(Employee employee) {
-        if (employee.getEmail() == null || employee.getEmail().isBlank()) {
-            throw new IllegalArgumentException("Email must not be empty");
-        }
         return employeeRepository.save(employee);
     }
 
     @Override
     public Employee updateEmployee(Long id, Employee employee) {
         Employee existing = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
         existing.setFullName(employee.getFullName());
         existing.setEmail(employee.getEmail());
@@ -33,4 +31,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    publ
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
+
+    @Override
+    public void deactivateEmployee(Long id) {
+        Employee emp = getEmployeeById(id);
+        emp.setActive(false);
+        employeeRepository.save(emp);
+    }
+}

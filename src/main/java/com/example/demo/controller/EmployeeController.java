@@ -17,36 +17,33 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    // POST - create employee
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.createEmployee(employee));
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee emp) {
+        Employee created = employeeService.createEmployee(emp);
+        return ResponseEntity.ok(created);
     }
 
-    // PUT - update employee
-    @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(
-            @PathVariable Long id,
-            @RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.updateEmployee(id, employee));
-    }
-
-    // GET - get by id
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
-        return ResponseEntity.ok(employeeService.getEmployeeById(id));
+        Employee emp = employeeService.getEmployeeById(id);
+        return ResponseEntity.ok(emp);
     }
 
-    // GET - get all
     @GetMapping
     public ResponseEntity<List<Employee>> getAllEmployees() {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-    // DELETE - deactivate employee
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id,
+                                                   @RequestBody Employee emp) {
+        Employee updated = employeeService.updateEmployee(id, emp);
+        return ResponseEntity.ok(updated);
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deactivateEmployee(@PathVariable Long id) {
+    public ResponseEntity<Void> deactivateEmployee(@PathVariable Long id) {
         employeeService.deactivateEmployee(id);
-        return ResponseEntity.ok("Employee deactivated successfully");
+        return ResponseEntity.noContent().build();
     }
 }

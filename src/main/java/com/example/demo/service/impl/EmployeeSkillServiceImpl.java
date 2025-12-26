@@ -13,12 +13,12 @@ import java.util.Set;
 
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
+    private static final Set<String> ALLOWED_PROFICIENCY =
+            Set.of("Beginner", "Intermediate", "Advanced");
+
     private final EmployeeSkillRepository employeeSkillRepository;
     private final EmployeeRepository employeeRepository;
     private final SkillRepository skillRepository;
-
-    private static final Set<String> VALID_PROFICIENCIES =
-            Set.of("Beginner", "Intermediate", "Advanced");
 
     public EmployeeSkillServiceImpl(EmployeeSkillRepository employeeSkillRepository,
                                     EmployeeRepository employeeRepository,
@@ -29,35 +29,31 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     }
 
     @Override
-    public EmployeeSkill createEmployeeSkill(EmployeeSkill employeeSkill) {
+    public EmployeeSkill createEmployeeSkill(EmployeeSkill es) {
 
-        if (employeeSkill.getYearsOfExperience() < 0) {
-            throw new IllegalArgumentException("Experience years must be non-negative");
-        }
-
-        if (!VALID_PROFICIENCIES.contains(employeeSkill.getProficiencyLevel())) {
-            throw new IllegalArgumentException("Invalid proficiency");
-        }
-
-        Employee emp = employeeRepository.findById(employeeSkill.getEmployee().getId())
+        Employee emp = employeeRepository.findById(es.getEmployee().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found"));
 
-        Skill skill = skillRepository.findById(employeeSkill.getSkill().getId())
+        Skill skill = skillRepository.findById(es.getSkill().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Skill not found"));
 
         if (!emp.getActive()) {
             throw new IllegalArgumentException("inactive employee");
         }
-
         if (!skill.getActive()) {
             throw new IllegalArgumentException("inactive skill");
         }
+        if (es.getYearsOfExperience() < 0) {
+            throw new IllegalArgumentException("Experience years must be positive");
+        }
+        if (!ALLOWED_PROFICIENCY.contains(es.getProficiencyLevel())) {
+            throw new IllegalArgumentException("Invalid proficiency");
+        }
 
-        employeeSkill.setEmployee(emp);
-        employeeSkill.setSkill(skill);
-        employeeSkill.setActive(true);
-
-        return employeeSkillRepository.save(employeeSkill);
+        es.setEmployee(emp);
+        es.setSkill(skill);
+        es.setActive(true);
+        return employeeSkillRepository.save(es);
     }
 
     @Override
@@ -73,7 +69,8 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     @Override
     public void deactivateEmployeeSkill(Long id) {
         EmployeeSkill es = employeeSkillRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
+                .orElseThrow(() -> new IllegalArgumentException("EmployeeSkill not found"));
+
         es.setActive(false);
         employeeSkillRepository.save(es);
     }

@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 public class SearchQueryServiceImpl implements SearchQueryService {
 
-    private final SearchQueryRecordRepository searchQueryRecordRepository;
+    private final SearchQueryRecordRepository searchRepo;
     private final EmployeeSkillRepository employeeSkillRepository;
 
-    public SearchQueryServiceImpl(SearchQueryRecordRepository searchQueryRecordRepository,
+    public SearchQueryServiceImpl(SearchQueryRecordRepository searchRepo,
                                   EmployeeSkillRepository employeeSkillRepository) {
-        this.searchQueryRecordRepository = searchQueryRecordRepository;
+        this.searchRepo = searchRepo;
         this.employeeSkillRepository = employeeSkillRepository;
     }
 
@@ -24,40 +24,40 @@ public class SearchQueryServiceImpl implements SearchQueryService {
     public List<Employee> searchEmployeesBySkills(List<String> skills, Long searcherId) {
 
         if (skills == null || skills.isEmpty()) {
-            throw new IllegalArgumentException("Skills list must not be empty");
+            throw new IllegalArgumentException("Skills must not be empty");
         }
 
         List<String> normalized = skills.stream()
-                .map(String::trim)
-                .map(String::toLowerCase)
+                .map(s -> s.trim().toLowerCase())
                 .distinct()
                 .collect(Collectors.toList());
 
-        List<Employee> result = employeeSkillRepository
-                .findEmployeesByAllSkillNames(normalized, (long) normalized.size());
+        List<Employee> result =
+                employeeSkillRepository.findEmployeesByAllSkillNames(
+                        normalized, (long) normalized.size());
 
         SearchQueryRecord record = new SearchQueryRecord();
         record.setSearcherId(searcherId);
         record.setSkillsRequested(String.join(",", normalized));
         record.setResultsCount(result.size());
-        searchQueryRecordRepository.save(record);
 
+        searchRepo.save(record);
         return result;
     }
 
     @Override
     public void saveQuery(SearchQueryRecord record) {
-        searchQueryRecordRepository.save(record);
+        searchRepo.save(record);
     }
 
     @Override
     public SearchQueryRecord getQueryById(Long id) {
-        return searchQueryRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Query not found"));
+        return searchRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Query not found"));
     }
 
     @Override
     public List<SearchQueryRecord> getQueriesForUser(Long searcherId) {
-        return searchQueryRecordRepository.findBySearcherId(searcherId);
+        return searchRepo.findBySearcherId(searcherId);
     }
 }
