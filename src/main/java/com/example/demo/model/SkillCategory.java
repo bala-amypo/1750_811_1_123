@@ -3,13 +3,42 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "skill_categories",
+       uniqueConstraints = @UniqueConstraint(columnNames = "categoryName"))
 public class SkillCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String categoryName;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    private Boolean active = true;
+
+    // Getters & Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
