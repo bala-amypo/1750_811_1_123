@@ -5,7 +5,6 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 public class TotalResultListener implements ITestListener {
-
     private int passed = 0;
     private int failed = 0;
     private int skipped = 0;
@@ -33,10 +32,7 @@ public class TotalResultListener implements ITestListener {
         System.out.println("TOTAL RESULTS: PASSED=" + passed + ", FAILED=" + failed + ", SKIPPED=" + skipped);
     }
 
-    @Override
-    public void onStart(ITestContext context) {}
-    @Override
-    public void onTestStart(ITestResult result) {}
-    @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
+    @Override public void onStart(ITestContext context) {}
+    @Override public void onTestStart(ITestResult result) {}
+    @Override public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
 }
