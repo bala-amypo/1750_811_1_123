@@ -857,7 +857,7 @@ public class EmployeeSkillsMatrixTestNGTests {
         ArgumentCaptor<SearchQueryRecord> captor = ArgumentCaptor.forClass(SearchQueryRecord.class);
         verify(searchQueryRecordRepository, atLeastOnce()).save(captor.capture());
         SearchQueryRecord saved = captor.getValue();
-Assert.assertEquals(saved.getResultsCount().intValue(), 2);
+        Assert.assertEquals(saved.getResultsCount().intValue(), 2);
         Assert.assertEquals(saved.getSearcherId(), Long.valueOf(3L));
     }
 }
