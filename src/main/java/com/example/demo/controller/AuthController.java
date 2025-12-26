@@ -1,29 +1,37 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthLoginRequest;
-import com.example.demo.dto.AuthRegisterRequest;
+import com.example.demo.model.Employee;
+import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.security.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
+    private final EmployeeRepository employeeRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthController(JwtTokenProvider jwtTokenProvider) {
+    public AuthController(EmployeeRepository employeeRepository,
+                          JwtTokenProvider jwtTokenProvider) {
+        this.employeeRepository = employeeRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // POST - login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthLoginRequest request) {
-        String token = jwtTokenProvider.generateToken(request.getUsername());
-        return ResponseEntity.ok(token);
-    }
+    public ResponseEntity<Map<String, String>> login(
+            @RequestParam String email) {
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthRegisterRequest request) {
-        return ResponseEntity.ok("User registered successfully");
+        Employee emp = employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String token = jwtTokenProvider.generateToken(
+                emp.getId(), emp.getEmail(), "USER");
+
+        return ResponseEntity.ok(Map.of("token", token));
     }
 }
