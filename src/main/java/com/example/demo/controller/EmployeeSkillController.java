@@ -17,33 +17,27 @@ public class EmployeeSkillController {
         this.employeeSkillService = employeeSkillService;
     }
 
-    // POST - assign skill to employee
     @PostMapping
-    public ResponseEntity<EmployeeSkill> createEmployeeSkill(
-            @RequestBody EmployeeSkill employeeSkill) {
-        return ResponseEntity.ok(employeeSkillService.createEmployeeSkill(employeeSkill));
+    public ResponseEntity<EmployeeSkill> addEmployeeSkill(@RequestBody EmployeeSkill es) {
+        EmployeeSkill created = employeeSkillService.createEmployeeSkill(es);
+        return ResponseEntity.ok(created);
     }
 
-    // GET - skills for employee
     @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<EmployeeSkill>> getSkillsForEmployee(
-            @PathVariable Long employeeId) {
-        return ResponseEntity.ok(
-                employeeSkillService.getSkillsForEmployee(employeeId));
+    public ResponseEntity<List<EmployeeSkill>> getSkillsForEmployee(@PathVariable Long employeeId) {
+        List<EmployeeSkill> skills = employeeSkillService.getSkillsForEmployee(employeeId);
+        return ResponseEntity.ok(skills);
     }
 
-    // GET - employees by skill
     @GetMapping("/skill/{skillId}")
-    public ResponseEntity<List<EmployeeSkill>> getEmployeesBySkill(
-            @PathVariable Long skillId) {
-        return ResponseEntity.ok(
-                employeeSkillService.getEmployeesBySkill(skillId));
+    public ResponseEntity<List<EmployeeSkill>> getEmployeesBySkill(@PathVariable Long skillId) {
+        List<EmployeeSkill> employees = employeeSkillService.getEmployeesBySkill(skillId);
+        return ResponseEntity.ok(employees);
     }
 
-    // DELETE - deactivate mapping
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deactivateEmployeeSkill(@PathVariable Long id) {
+    public ResponseEntity<Void> deactivateEmployeeSkill(@PathVariable Long id) {
         employeeSkillService.deactivateEmployeeSkill(id);
-        return ResponseEntity.ok("Employee skill mapping deactivated");
+        return ResponseEntity.noContent().build();
     }
 }
