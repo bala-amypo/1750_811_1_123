@@ -411,14 +411,17 @@ public class EmployeeSkillsMatrixTestNGTests {
     }
 
     @Test(priority = 4, groups = "hibernate")
-    public void testSearchQueryRecordPrePersistSetsTimestamp() {
-        SearchQueryRecord record = new SearchQueryRecord();
-        record.setSearcherId(1L);
-        record.setSkillsRequested("java");
-        record.onCreate();
-        Assert.assertNotNull(record.getSearchedAt());
-        Assert.assertEquals(saved.getResultsCount().intValue(), 0);
-    }
+public void testSearchQueryRecordPrePersistSetsTimestamp() {
+    SearchQueryRecord record = new SearchQueryRecord();
+    record.setSearcherId(1L);
+    record.setSkillsRequested("java");
+
+    record.onCreate();
+
+    Assert.assertNotNull(record.getSearchedAt());
+    Assert.assertEquals(record.getResultsCount().intValue(), 0);
+}
+
 
     @Test(priority = 4, groups = "hibernate")
     public void testCreateSkillWithUniqueNameConstraintEdge() {
