@@ -1,15 +1,28 @@
 package com.example.demo.dto;
 
 public class EmployeeDTO {
-    private String fullName;
+    private String name;
     private String email;
-    private boolean active;
+    private String designation;
 
-    // Getters and Setters
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
 }

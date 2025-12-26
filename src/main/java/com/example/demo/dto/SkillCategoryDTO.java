@@ -1,12 +1,12 @@
 package com.example.demo.dto;
 
 public class SkillCategoryDTO {
-    private String categoryName;
-    private boolean active;
+    private String name;
 
-    // Getters and Setters
-    public String getCategoryName() { return categoryName; }
-    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 }
