@@ -426,7 +426,7 @@ public class EmployeeSkillsMatrixTestNGTests {
         record.setSkillsRequested("java");
         record.onCreate();
         Assert.assertNotNull(record.getSearchedAt());
-        Assert.assertEquals((int) record.getResultsCount(), 0);
+        Assert.assertEquals(record.getResultsCount(), Long.valueOf(0));
     }
 
     @Test(priority = 4, groups = "hibernate")
@@ -866,7 +866,7 @@ public class EmployeeSkillsMatrixTestNGTests {
         ArgumentCaptor<SearchQueryRecord> captor = ArgumentCaptor.forClass(SearchQueryRecord.class);
         verify(searchQueryRecordRepository, atLeastOnce()).save(captor.capture());
         SearchQueryRecord saved = captor.getValue();
-        Assert.assertEquals((int) saved.getResultsCount(), 2);
+        Assert.assertEquals(saved.getResultsCount(), Long.valueOf(2));
         Assert.assertEquals(saved.getSearcherId(), Long.valueOf(3L));
     }
 }
