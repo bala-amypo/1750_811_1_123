@@ -1,16 +1,20 @@
-// Skill.java
 package com.example.demo.model;
 
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "skills")
 public class Skill {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String name;
+
     private Boolean active = true;
 
-    // getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

@@ -1,39 +1,24 @@
 package com.example.demo.dto;
 
 public class EmployeeDTO {
-    private Long id;
     private String fullName;
     private String email;
-    private Boolean active;
-
-    public EmployeeDTO() {}
-
-    public EmployeeDTO(Long id, String fullName, String email, Boolean active) {
-        this.id = id;
-        this.fullName = fullName;
-        this.email = email;
-        this.active = active;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
+    // Getters & Setters
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
-
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+}
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+public class SkillDTO {
+    private String name;
+    // Getter & Setter
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+}
 
-    @Override
-    public String toString() {
-        return "EmployeeDTO{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", active=" + active +
-                '}';
-    }
+public class SkillCategoryDTO {
+    private String categoryName;
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 }

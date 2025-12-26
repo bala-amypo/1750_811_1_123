@@ -1,23 +1,25 @@
-// Employee.java
 package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "employees")
 public class Employee {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fullName;
+    @Column(unique = true)
     private String email;
+
     private Boolean active = true;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public void onCreate() { this.createdAt = LocalDateTime.now(); }
-    public void onUpdate() { this.updatedAt = LocalDateTime.now(); }
-
-    // getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getFullName() { return fullName; }
@@ -28,4 +30,9 @@ public class Employee {
     public void setActive(Boolean active) { this.active = active; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+
+    @PrePersist
+    public void onCreate() { createdAt = LocalDateTime.now(); updatedAt = createdAt; }
+    @PreUpdate
+    public void onUpdate() { updatedAt = LocalDateTime.now(); }
 }
