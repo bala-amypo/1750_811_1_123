@@ -1,32 +1,32 @@
 package com.example.demo.dto;
 
-public class SkillDTO {
+public class SkillCategoryDTO {
     private Long id;
-    private String name;
+    private String categoryName;
     private Boolean active;
 
-    public SkillDTO() {}
+    public SkillCategoryDTO() {}
 
-    public SkillDTO(Long id, String name, Boolean active) {
+    public SkillCategoryDTO(Long id, String categoryName, Boolean active) {
         this.id = id;
-        this.name = name;
+        this.categoryName = categoryName;
         this.active = active;
     }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 
     @Override
     public String toString() {
-        return "SkillDTO{" +
+        return "SkillCategoryDTO{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", categoryName='" + categoryName + '\'' +
                 ", active=" + active +
                 '}';
     }
