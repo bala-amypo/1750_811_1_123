@@ -44,8 +44,8 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
             EmployeeSkill employeeSkill = new EmployeeSkill();
             employeeSkill.setEmployee(emp);
             employeeSkill.setSkill(skill);
-            employeeSkill.setRating(rating); // <- ensure EmployeeSkill has rating field
-            employeeSkill.setActive(true);   // optional: track active/inactive
+            employeeSkill.setRating(rating);
+            employeeSkill.setActive(true);
             return employeeSkillRepository.save(employeeSkill);
         } else {
             throw new IllegalStateException("Employee is not active");
@@ -68,5 +68,20 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
                 .orElseThrow(() -> new IllegalArgumentException("EmployeeSkill not found"));
         empSkill.setActive(false);
         employeeSkillRepository.save(empSkill);
+    }
+
+    @Override
+    public EmployeeSkill createEmployeeSkill(EmployeeSkill employeeSkill) {
+        return employeeSkillRepository.save(employeeSkill);
+    }
+
+    @Override
+    public List<EmployeeSkill> getSkillsForEmployee(Long employeeId) {
+        return employeeSkillRepository.findByEmployeeId(employeeId);
+    }
+
+    @Override
+    public List<EmployeeSkill> getEmployeesBySkill(Long skillId) {
+        return employeeSkillRepository.findBySkillId(skillId);
     }
 }

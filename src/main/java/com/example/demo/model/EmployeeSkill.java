@@ -15,11 +15,11 @@ public class EmployeeSkill {
     @ManyToOne
     private Skill skill;
 
-    private int rating;     // <- add this field
+    private int rating;
 
-    private Boolean active; // <- add this field to track active/inactive
+    private Boolean active;
 
-    // getters and setters
+    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
