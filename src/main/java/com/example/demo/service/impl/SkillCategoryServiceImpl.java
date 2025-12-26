@@ -1,49 +1,50 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.SkillCategoryDTO;
 import com.example.demo.model.SkillCategory;
 import com.example.demo.repository.SkillCategoryRepository;
 import com.example.demo.service.SkillCategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SkillCategoryServiceImpl implements SkillCategoryService {
 
-    private final SkillCategoryRepository skillCategoryRepository;
-
-    public SkillCategoryServiceImpl(SkillCategoryRepository skillCategoryRepository) {
-        this.skillCategoryRepository = skillCategoryRepository;
-    }
+    @Autowired
+    private SkillCategoryRepository categoryRepository;
 
     @Override
-    public SkillCategory createCategory(SkillCategory category) {
-        category.setActive(true);
-        return skillCategoryRepository.save(category);
-    }
-
-    @Override
-    public SkillCategory updateCategory(Long id, SkillCategory category) {
-        SkillCategory existing = skillCategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        existing.setCategoryName(category.getCategoryName());
-        return skillCategoryRepository.save(existing);
-    }
-
-    @Override
-    public SkillCategory getCategoryById(Long id) {
-        return skillCategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+    public Optional<SkillCategory> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
     }
 
     @Override
     public List<SkillCategory> getAllCategories() {
-        return skillCategoryRepository.findAll();
+        return categoryRepository.findAll();
     }
 
     @Override
-    public void deactivateCategory(Long id) {
-        SkillCategory existing = getCategoryById(id);
-        existing.setActive(false);
-        skillCategoryRepository.save(existing);
+    public SkillCategory createCategory(SkillCategoryDTO dto) {
+        SkillCategory category = new SkillCategory();
+        category.setName(dto.getName());
+        return categoryRepository.save(category);
+    }
+
+    @Override
+    public Optional<SkillCategory> updateCategory(Long id, SkillCategoryDTO dto) {
+        Optional<SkillCategory> optionalCategory = categoryRepository.findById(id);
+        optionalCategory.ifPresent(cat -> {
+            cat.setName(dto.getName());
+            categoryRepository.save(cat);
+        });
+        return optionalCategory;
+    }
+
+    @Override
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
 }

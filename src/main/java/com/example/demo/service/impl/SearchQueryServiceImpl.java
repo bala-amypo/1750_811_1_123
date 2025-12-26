@@ -1,65 +1,30 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Employee;
+import com.example.demo.dto.SearchQueryDTO;
 import com.example.demo.model.SearchQueryRecord;
-import com.example.demo.repository.EmployeeSkillRepository;
 import com.example.demo.repository.SearchQueryRecordRepository;
 import com.example.demo.service.SearchQueryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SearchQueryServiceImpl implements SearchQueryService {
 
-    private final SearchQueryRecordRepository searchQueryRecordRepository;
-    private final EmployeeSkillRepository employeeSkillRepository;
-
-    public SearchQueryServiceImpl(SearchQueryRecordRepository searchQueryRecordRepository,
-                                  EmployeeSkillRepository employeeSkillRepository) {
-        this.searchQueryRecordRepository = searchQueryRecordRepository;
-        this.employeeSkillRepository = employeeSkillRepository;
-    }
+    @Autowired
+    private SearchQueryRecordRepository repository;
 
     @Override
-    public List<Employee> searchEmployeesBySkills(List<String> skills, Long searcherId) {
-        if (skills == null || skills.isEmpty())
-            throw new IllegalArgumentException("Skill list must not be empty");
-
-        // Normalize skills (trim + lowercase)
-        List<String> normalizedSkills = skills.stream()
-                .map(String::trim)
-                .map(String::toLowerCase)
-                .distinct()
-                .collect(Collectors.toList());
-
-        List<Employee> employees = employeeSkillRepository
-                .findEmployeesByAllSkillNames(normalizedSkills, searcherId);
-
-        // Save query
+    public SearchQueryRecord createSearchQuery(SearchQueryDTO dto) {
         SearchQueryRecord record = new SearchQueryRecord();
-        record.setSearcherId(searcherId);
-        record.setSkillsRequested(String.join(",", normalizedSkills));
-        record.setResultsCount(employees.size());
-        searchQueryRecordRepository.save(record);
-
-        return employees;
+        record.setSearcherId(dto.getSearcherId());
+        record.setQuery(dto.getQuery());
+        return repository.save(record);
     }
 
     @Override
-    public void saveQuery(SearchQueryRecord record) {
-        searchQueryRecordRepository.save(record);
-    }
-
-    @Override
-    public SearchQueryRecord getQueryById(Long id) {
-        return searchQueryRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Query not found"));
-    }
-
-    @Override
-    public List<SearchQueryRecord> getQueriesForUser(Long userId) {
-        return searchQueryRecordRepository.findBySearcherId(userId);
+    public List<SearchQueryRecord> getQueriesBySearcherId(Long searcherId) {
+        return repository.findBySearcherId(searcherId);
     }
 }

@@ -1,12 +1,20 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.SkillDTO;
 import com.example.demo.model.Skill;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface SkillService {
-    Skill createSkill(Skill skill);
-    Skill updateSkill(Long id, Skill skill);
-    Skill getSkillById(Long id);
+
+    Optional<Skill> getSkillById(Long id);
+
     List<Skill> getAllSkills();
-    void deactivateSkill(Long id);
+
+    Skill createSkill(SkillDTO dto);
+
+    Optional<Skill> updateSkill(Long id, SkillDTO dto);
+
+    void deleteSkill(Long id);
 }

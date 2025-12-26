@@ -4,53 +4,42 @@ import com.example.demo.dto.SkillCategoryDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SkillCategory;
 import com.example.demo.service.SkillCategoryService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/skill-categories")
+@RequestMapping("/categories")
 public class SkillCategoryController {
 
-    private final SkillCategoryService skillCategoryService;
-
-    public SkillCategoryController(SkillCategoryService skillCategoryService) {
-        this.skillCategoryService = skillCategoryService;
-    }
-
-    @PostMapping
-    public ResponseEntity<SkillCategory> createCategory(@RequestBody SkillCategoryDTO dto) {
-        SkillCategory cat = new SkillCategory();
-        cat.setCategoryName(dto.getCategoryName());
-        SkillCategory created = skillCategoryService.createCategory(cat);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
-    }
+    @Autowired
+    private SkillCategoryService skillCategoryService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<SkillCategory> getCategoryById(@PathVariable Long id) {
-        SkillCategory cat = skillCategoryService.getCategoryById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("SkillCategory", "id", id));
-        return ResponseEntity.ok(cat);
+    public SkillCategory getCategoryById(@PathVariable Long id) {
+        return skillCategoryService.getCategoryById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
     }
 
     @GetMapping
-    public ResponseEntity<List<SkillCategory>> getAllCategories() {
-        return ResponseEntity.ok(skillCategoryService.getAllCategories());
+    public List<SkillCategory> getAllCategories() {
+        return skillCategoryService.getAllCategories();
+    }
+
+    @PostMapping
+    public SkillCategory createCategory(@RequestBody SkillCategoryDTO dto) {
+        return skillCategoryService.createCategory(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SkillCategory> updateCategory(@PathVariable Long id, @RequestBody SkillCategoryDTO dto) {
-        SkillCategory cat = new SkillCategory();
-        cat.setCategoryName(dto.getCategoryName());
-        SkillCategory updated = skillCategoryService.updateCategory(id, cat);
-        return ResponseEntity.ok(updated);
+    public SkillCategory updateCategory(@PathVariable Long id, @RequestBody SkillCategoryDTO dto) {
+        return skillCategoryService.updateCategory(id, dto)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deactivateCategory(@PathVariable Long id) {
-        skillCategoryService.deactivateCategory(id);
-        return ResponseEntity.noContent().build();
+    public void deleteCategory(@PathVariable Long id) {
+        skillCategoryService.deleteCategory(id);
     }
 }

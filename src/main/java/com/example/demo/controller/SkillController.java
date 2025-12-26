@@ -4,53 +4,42 @@ import com.example.demo.dto.SkillDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Skill;
 import com.example.demo.service.SkillService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/skills")
+@RequestMapping("/skills")
 public class SkillController {
 
-    private final SkillService skillService;
-
-    public SkillController(SkillService skillService) {
-        this.skillService = skillService;
-    }
-
-    @PostMapping
-    public ResponseEntity<Skill> createSkill(@RequestBody SkillDTO dto) {
-        Skill skill = new Skill();
-        skill.setName(dto.getName());
-        Skill created = skillService.createSkill(skill);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
-    }
+    @Autowired
+    private SkillService skillService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Skill> getSkillById(@PathVariable Long id) {
-        Skill skill = skillService.getSkillById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Skill", "id", id));
-        return ResponseEntity.ok(skill);
+    public Skill getSkillById(@PathVariable Long id) {
+        return skillService.getSkillById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Skill not found with id: " + id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Skill>> getAllSkills() {
-        return ResponseEntity.ok(skillService.getAllSkills());
+    public List<Skill> getAllSkills() {
+        return skillService.getAllSkills();
+    }
+
+    @PostMapping
+    public Skill createSkill(@RequestBody SkillDTO dto) {
+        return skillService.createSkill(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Skill> updateSkill(@PathVariable Long id, @RequestBody SkillDTO dto) {
-        Skill skill = new Skill();
-        skill.setName(dto.getName());
-        Skill updated = skillService.updateSkill(id, skill);
-        return ResponseEntity.ok(updated);
+    public Skill updateSkill(@PathVariable Long id, @RequestBody SkillDTO dto) {
+        return skillService.updateSkill(id, dto)
+                .orElseThrow(() -> new ResourceNotFoundException("Skill not found with id: " + id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deactivateSkill(@PathVariable Long id) {
-        skillService.deactivateSkill(id);
-        return ResponseEntity.noContent().build();
+    public void deleteSkill(@PathVariable Long id) {
+        skillService.deleteSkill(id);
     }
 }

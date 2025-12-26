@@ -1,38 +1,24 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.SkillDTO;
 import com.example.demo.model.Skill;
 import com.example.demo.repository.SkillRepository;
 import com.example.demo.service.SkillService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SkillServiceImpl implements SkillService {
 
-    private final SkillRepository skillRepository;
-
-    public SkillServiceImpl(SkillRepository skillRepository) {
-        this.skillRepository = skillRepository;
-    }
+    @Autowired
+    private SkillRepository skillRepository;
 
     @Override
-    public Skill createSkill(Skill skill) {
-        skill.setActive(true);
-        return skillRepository.save(skill);
-    }
-
-    @Override
-    public Skill updateSkill(Long id, Skill skill) {
-        Skill existing = skillRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Skill not found"));
-        existing.setName(skill.getName());
-        return skillRepository.save(existing);
-    }
-
-    @Override
-    public Skill getSkillById(Long id) {
-        return skillRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Skill not found"));
+    public Optional<Skill> getSkillById(Long id) {
+        return skillRepository.findById(id);
     }
 
     @Override
@@ -41,9 +27,26 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public void deactivateSkill(Long id) {
-        Skill existing = getSkillById(id);
-        existing.setActive(false);
-        skillRepository.save(existing);
+    public Skill createSkill(SkillDTO dto) {
+        Skill skill = new Skill();
+        skill.setName(dto.getName());
+        skill.setCategoryId(dto.getCategoryId());
+        return skillRepository.save(skill);
+    }
+
+    @Override
+    public Optional<Skill> updateSkill(Long id, SkillDTO dto) {
+        Optional<Skill> optionalSkill = skillRepository.findById(id);
+        optionalSkill.ifPresent(skill -> {
+            skill.setName(dto.getName());
+            skill.setCategoryId(dto.getCategoryId());
+            skillRepository.save(skill);
+        });
+        return optionalSkill;
+    }
+
+    @Override
+    public void deleteSkill(Long id) {
+        skillRepository.deleteById(id);
     }
 }

@@ -4,55 +4,42 @@ import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/employees")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
-
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
-
-    @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDTO dto) {
-        Employee emp = new Employee();
-        emp.setFullName(dto.getFullName());
-        emp.setEmail(dto.getEmail());
-        Employee created = employeeService.createEmployee(emp);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
-    }
+    @Autowired
+    private EmployeeService employeeService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-        Employee emp = employeeService.getEmployeeById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
-        return ResponseEntity.ok(emp);
+    public Employee getEmployeeById(@PathVariable Long id) {
+        return employeeService.getEmployeeById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
+    }
+
+    @PostMapping
+    public Employee createEmployee(@RequestBody EmployeeDTO dto) {
+        return employeeService.createEmployee(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO dto) {
-        Employee emp = new Employee();
-        emp.setFullName(dto.getFullName());
-        emp.setEmail(dto.getEmail());
-        Employee updated = employeeService.updateEmployee(id, emp);
-        return ResponseEntity.ok(updated);
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO dto) {
+        return employeeService.updateEmployee(id, dto)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deactivateEmployee(@PathVariable Long id) {
-        employeeService.deactivateEmployee(id);
-        return ResponseEntity.noContent().build();
+    public void deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
     }
 }
