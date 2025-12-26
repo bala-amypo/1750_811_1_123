@@ -18,6 +18,8 @@ public class Employee {
 
     private String position;
 
+    private Boolean active; // <--- Add this field
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -33,4 +35,7 @@ public class Employee {
 
     public String getPosition() { return position; }
     public void setPosition(String position) { this.position = position; }
+
+    public Boolean getActive() { return active; }  // <--- Add getter
+    public void setActive(Boolean active) { this.active = active; } // <--- Add setter
 }
