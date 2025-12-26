@@ -1,21 +1,8 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-
-<suite name="Employee Skill Matrix Test Suite" verbose="1" parallel="false">
-
-    <test name="API Tests">
+<suite name="Employee Skill Matrix Suite">
+    <test name="TestNG Tests">
         <classes>
-            <!-- Auth tests -->
-            <class name="com.example.demo.test.AuthControllerTest"/>
-
-            <!-- Employee tests -->
-            <class name="com.example.demo.test.EmployeeControllerTest"/>
-
-            <!-- Skill tests -->
-            <class name="com.example.demo.test.SkillControllerTest"/>
-
-            <!-- Employee-Skill mapping tests -->
-            <class name="com.example.demo.test.EmployeeSkillControllerTest"/>
+            <class name="com.example.demo.EmployeeSkillsMatrixTestNGTests"/>
         </classes>
     </test>
-
 </suite>
