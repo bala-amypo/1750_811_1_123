@@ -1,33 +1,34 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Employee;
-import com.example.demo.model.SearchQuery;
+import com.example.demo.model.SearchQueryRecord;
 import com.example.demo.service.SearchQueryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/search")
 public class SearchQueryController {
 
-    @Autowired
-    private SearchQueryService searchService;
-
-    @PostMapping("/employees")
-    public List<Employee> searchEmployeesBySkills(@RequestBody List<String> skillNames,
-                                                  @RequestParam Long employeeId) {
-        return searchService.searchEmployeesBySkills(skillNames, employeeId);
+    private final SearchQueryService searchService;
+    public SearchQueryController(SearchQueryService searchService) {
+        this.searchService = searchService;
     }
 
-    @GetMapping("/query/{queryId}")
-    public SearchQuery getQueryById(@PathVariable Long queryId) {
-        return searchService.getQueryById(queryId);
+    @PostMapping
+    public ResponseEntity<List<Employee>> searchEmployees(@RequestBody List<String> skills,
+                                                          @RequestParam Long searcherId) {
+        return ResponseEntity.ok(searchService.searchEmployeesBySkills(skills, searcherId));
+    }
+
+    @GetMapping("/query/{id}")
+    public ResponseEntity<SearchQueryRecord> getQueryById(@PathVariable Long id) {
+        return ResponseEntity.ok(searchService.getQueryById(id));
     }
 
     @GetMapping("/user/{userId}")
-    public List<SearchQuery> getQueriesForUser(@PathVariable Long userId) {
-        return searchService.getQueriesForUser(userId);
+    public ResponseEntity<List<SearchQueryRecord>> getQueriesForUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(searchService.getQueriesForUser(userId));
     }
 }
