@@ -7,7 +7,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!--  Spring Boot Parent (Manages Versions) -->
+    <!--  Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -20,8 +20,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Employee Skills Matrix</name>
-
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -29,48 +27,35 @@
     <!-- ================= DEPENDENCIES ================= -->
     <dependencies>
 
-        <!-- Spring Core -->
+        <!-- Core -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Spring Web (Servlet tests) -->
+        <!-- Web / Servlet -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- ================= TESTING ================= -->
-
-        <!--  TestNG -->
+        <!--  JPA (FIXES Entity, Table, Id, JpaRepository) -->
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.10.2</version>
-            <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Mockito Core -->
+        <!--  Security (FIXES UserDetailsService, SecurityFilterChain) -->
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!--  Mockito Inline (VERSION REQUIRED) -->
+        <!--  Swagger / OpenAPI (FIXES OpenAPI, Info, Server) -->
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>5.2.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Spring Test Utilities -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
         </dependency>
 
         <!-- JWT -->
@@ -92,13 +77,44 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- ================= TESTING ================= -->
+
+        <!-- TestNG -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.10.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Spring Test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- ================= BUILD ================= -->
     <build>
         <plugins>
 
-            <!-- Compiler -->
+            <!-- Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -109,13 +125,11 @@
                 </configuration>
             </plugin>
 
-            <!-- TestNG Runner -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <testNGArtifactName>org.testng:testng</testNGArtifactName>
                     <includes>
                         <include>**/*TestNGTests.java</include>
                     </includes>
