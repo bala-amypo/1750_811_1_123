@@ -4,27 +4,22 @@ import com.example.demo.dto.SearchQueryDTO;
 import com.example.demo.model.SearchQueryRecord;
 import com.example.demo.repository.SearchQueryRecordRepository;
 import com.example.demo.service.SearchQueryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class SearchQueryServiceImpl implements SearchQueryService {
 
-    @Autowired
-    private SearchQueryRecordRepository repository;
+    private final SearchQueryRecordRepository repository;
 
-    @Override
-    public SearchQueryRecord createSearchQuery(SearchQueryDTO dto) {
-        SearchQueryRecord record = new SearchQueryRecord();
-        record.setSearcherId(dto.getSearcherId());
-        record.setQuery(dto.getQuery());
-        return repository.save(record);
+    public SearchQueryServiceImpl(SearchQueryRecordRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<SearchQueryRecord> getQueriesBySearcherId(Long searcherId) {
-        return repository.findBySearcherId(searcherId);
+    public SearchQueryRecord saveQuery(SearchQueryDTO dto, Long searcherId) {
+        SearchQueryRecord record = new SearchQueryRecord();
+        record.setQuery(dto.getQuery());
+        record.setSearcherId(searcherId);
+        return repository.save(record);
     }
 }

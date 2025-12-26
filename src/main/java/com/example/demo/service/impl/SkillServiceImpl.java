@@ -2,51 +2,32 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.SkillDTO;
 import com.example.demo.model.Skill;
+import com.example.demo.model.SkillCategory;
 import com.example.demo.repository.SkillRepository;
+import com.example.demo.repository.SkillCategoryRepository;
 import com.example.demo.service.SkillService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SkillServiceImpl implements SkillService {
 
-    @Autowired
-    private SkillRepository skillRepository;
+    private final SkillRepository skillRepository;
+    private final SkillCategoryRepository categoryRepository;
 
-    @Override
-    public Optional<Skill> getSkillById(Long id) {
-        return skillRepository.findById(id);
-    }
-
-    @Override
-    public List<Skill> getAllSkills() {
-        return skillRepository.findAll();
+    public SkillServiceImpl(SkillRepository skillRepository, SkillCategoryRepository categoryRepository) {
+        this.skillRepository = skillRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public Skill createSkill(SkillDTO dto) {
         Skill skill = new Skill();
         skill.setName(dto.getName());
-        skill.setCategoryId(dto.getCategoryId());
+
+        SkillCategory category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        skill.setCategory(category);
+
         return skillRepository.save(skill);
-    }
-
-    @Override
-    public Optional<Skill> updateSkill(Long id, SkillDTO dto) {
-        Optional<Skill> optionalSkill = skillRepository.findById(id);
-        optionalSkill.ifPresent(skill -> {
-            skill.setName(dto.getName());
-            skill.setCategoryId(dto.getCategoryId());
-            skillRepository.save(skill);
-        });
-        return optionalSkill;
-    }
-
-    @Override
-    public void deleteSkill(Long id) {
-        skillRepository.deleteById(id);
     }
 }

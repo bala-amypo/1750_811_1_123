@@ -3,25 +3,20 @@ package com.example.demo.controller;
 import com.example.demo.dto.SearchQueryDTO;
 import com.example.demo.model.SearchQueryRecord;
 import com.example.demo.service.SearchQueryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/search")
 public class SearchQueryController {
 
-    @Autowired
-    private SearchQueryService searchQueryService;
+    private final SearchQueryService searchQueryService;
 
-    @PostMapping
-    public SearchQueryRecord createSearchQuery(@RequestBody SearchQueryDTO dto) {
-        return searchQueryService.createSearchQuery(dto);
+    public SearchQueryController(SearchQueryService searchQueryService) {
+        this.searchQueryService = searchQueryService;
     }
 
-    @GetMapping("/{searcherId}")
-    public List<SearchQueryRecord> getQueriesByUser(@PathVariable Long searcherId) {
-        return searchQueryService.getQueriesBySearcherId(searcherId);
+    @PostMapping
+    public SearchQueryRecord saveQuery(@RequestBody SearchQueryDTO dto, @RequestParam Long searcherId) {
+        return searchQueryService.saveQuery(dto, searcherId);
     }
 }
