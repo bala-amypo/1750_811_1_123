@@ -426,7 +426,7 @@ public class EmployeeSkillsMatrixTestNGTests {
         record.setSkillsRequested("java");
         record.onCreate();
         Assert.assertNotNull(record.getSearchedAt());
-        Assert.assertEquals(saved.getResultsCount().intValue(), 0);
+        Assert.assertEquals(record.getResultsCount().intValue(), 0);
     }
 
     @Test(priority = 4, groups = "hibernate")
