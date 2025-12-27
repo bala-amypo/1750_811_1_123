@@ -23,9 +23,9 @@ public class Employee {
     private String role;
 
     @Column(nullable = false)
-    private boolean active = true;
+    private boolean active = true;   // ✅ IMPORTANT
 
-    // ===== GETTERS & SETTERS =====
+    // ---------- GETTERS & SETTERS ----------
 
     public Long getId() {
         return id;
@@ -67,7 +67,8 @@ public class Employee {
         this.role = role;
     }
 
-    public boolean getActive() {
+    // ✅ BOOLEAN GETTER MUST BE isActive()
+    public boolean isActive() {
         return active;
     }
 

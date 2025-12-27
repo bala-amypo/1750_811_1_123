@@ -1,11 +1,12 @@
 package com.example.demo.service.impl;
 
-import org.springframework.stereotype.Service;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -21,14 +22,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee updateEmployee(Long id, Employee updatedEmployee) {
-        Employee existing = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-
-        existing.setFullName(updatedEmployee.getFullName());
-        existing.setEmail(updatedEmployee.getEmail());
-
-        return employeeRepository.save(existing);
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
     }
 
     @Override
@@ -38,16 +33,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public Employee updateEmployee(Long id, Employee employee) {
+        Employee existing = getEmployeeById(id);
+
+        existing.setFullName(employee.getFullName());
+        existing.setEmail(employee.getEmail());
+        existing.setRole(employee.getRole());
+        existing.setActive(employee.isActive());
+
+        return employeeRepository.save(existing);
     }
 
     @Override
-    public void deactivateEmployee(Long id) {
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-
-        employee.setActive(false);
-        employeeRepository.save(employee);
+    public void deleteEmployee(Long id) {
+        Employee employee = getEmployeeById(id);
+        employeeRepository.delete(employee);
     }
 }
