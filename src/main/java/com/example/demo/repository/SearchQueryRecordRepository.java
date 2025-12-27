@@ -8,5 +8,5 @@ import java.util.List;
 public interface SearchQueryRecordRepository
         extends JpaRepository<SearchQueryRecord, Long> {
 
-    List<SearchQueryRecord> findBySearcherId(Long searcherId);
+    List<SearchQueryRecord> findByUserId(Long userId);
 }

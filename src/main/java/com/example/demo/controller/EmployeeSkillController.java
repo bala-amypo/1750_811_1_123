@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Employee;
 import com.example.demo.model.EmployeeSkill;
 import com.example.demo.service.EmployeeSkillService;
 import org.springframework.web.bind.annotation.*;
@@ -17,28 +16,27 @@ public class EmployeeSkillController {
         this.employeeSkillService = employeeSkillService;
     }
 
-    // ✅ ADD SKILL TO EMPLOYEE
-    @PostMapping("/{employeeId}/{skillId}")
-    public EmployeeSkill addEmployeeSkill(@PathVariable Long employeeId,
-                                          @PathVariable Long skillId) {
-        return employeeSkillService.addEmployeeSkill(employeeId, skillId);
+    // CREATE employee-skill mapping
+    @PostMapping
+    public EmployeeSkill createEmployeeSkill(@RequestBody EmployeeSkill employeeSkill) {
+        return employeeSkillService.createEmployeeSkill(employeeSkill);
     }
 
-    // ✅ GET SKILLS FOR EMPLOYEE
+    // GET skills of an employee
     @GetMapping("/employee/{employeeId}")
     public List<EmployeeSkill> getSkillsForEmployee(@PathVariable Long employeeId) {
         return employeeSkillService.getSkillsForEmployee(employeeId);
     }
 
-    // ✅ GET EMPLOYEES BY SKILL
+    // GET employee-skills by skill
     @GetMapping("/skill/{skillId}")
-    public List<Employee> getEmployeesBySkill(@PathVariable Long skillId) {
-        return employeeSkillService.getEmployeesBySkill(skillId);
+    public List<EmployeeSkill> getEmployeeSkillsBySkill(@PathVariable Long skillId) {
+        return employeeSkillService.getEmployeeSkillsBySkill(skillId);
     }
 
-    // ✅ DEACTIVATE EMPLOYEE SKILL
-    @DeleteMapping("/{employeeSkillId}")
-    public void deactivateEmployeeSkill(@PathVariable Long employeeSkillId) {
-        employeeSkillService.deactivateEmployeeSkill(employeeSkillId);
+    // DEACTIVATE mapping
+    @PutMapping("/{id}/deactivate")
+    public void deactivateEmployeeSkill(@PathVariable Long id) {
+        employeeSkillService.deactivateEmployeeSkill(id);
     }
 }
