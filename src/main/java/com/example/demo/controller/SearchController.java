@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Employee;
 import com.example.demo.model.SearchQueryRecord;
 import com.example.demo.service.SearchQueryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,19 +17,28 @@ public class SearchController {
         this.searchQueryService = searchQueryService;
     }
 
-    @PostMapping("/employees")
-    public List<Employee> searchEmployees(@RequestBody List<String> skills,
-                                          @RequestParam Long searcherId) {
-        return searchQueryService.searchEmployeesBySkills(skills, searcherId);
+    /**
+     * Save a search query
+     */
+    @PostMapping
+    public ResponseEntity<SearchQueryRecord> saveSearch(
+            @RequestParam Long userId,
+            @RequestBody List<String> skills
+    ) {
+        return ResponseEntity.ok(
+                searchQueryService.saveSearch(userId, skills)
+        );
     }
 
-    @GetMapping("/queries/{id}")
-    public SearchQueryRecord getQuery(@PathVariable Long id) {
-        return searchQueryService.getQueryById(id);
-    }
-
-    @GetMapping("/queries/user/{searcherId}")
-    public List<SearchQueryRecord> getQueriesForUser(@PathVariable Long searcherId) {
-        return searchQueryService.getQueriesForUser(searcherId);
+    /**
+     * Get search history of a user
+     */
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<SearchQueryRecord>> getSearchHistory(
+            @PathVariable Long userId
+    ) {
+        return ResponseEntity.ok(
+                searchQueryService.getQueriesForUser(userId)
+        );
     }
 }
