@@ -25,16 +25,13 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-
-                // ✅ PUBLIC APIs
                 .requestMatchers(
                         "/auth/**",
-                        "/swagger-ui/**",
                         "/v3/api-docs/**",
+                        "/swagger-ui/**",
                         "/swagger-ui.html"
                 ).permitAll()
-
-                // 🔒 EVERYTHING ELSE NEEDS JWT
+                .requestMatchers("/employees/**").authenticated()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -43,13 +40,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }
