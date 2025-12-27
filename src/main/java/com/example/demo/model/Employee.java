@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "employees",
-       uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(
+    name = "employees",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+    }
+)
 public class Employee {
 
     @Id
@@ -18,15 +22,28 @@ public class Employee {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // ✅ REQUIRED FOR AUTH
+    @Column(nullable = false)
+    private String password;
+
+    // ✅ REQUIRED FOR AUTH
+    @Column(nullable = false)
+    private String role;
+
+    @Column(nullable = false)
     private Boolean active = true;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    /* ===================== */
+    /* JPA LIFECYCLE METHODS */
+    /* ===================== */
+
     @PrePersist
     public void onCreate() {
-        this.active = true;
         this.createdAt = LocalDateTime.now();
+        this.active = true;
     }
 
     @PreUpdate
@@ -34,7 +51,9 @@ public class Employee {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
+    /* ===================== */
+    /* GETTERS & SETTERS     */
+    /* ===================== */
 
     public Long getId() {
         return id;
@@ -58,6 +77,24 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    // 🔑 AUTH REQUIRED
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // 🔑 AUTH REQUIRED
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public Boolean getActive() {
