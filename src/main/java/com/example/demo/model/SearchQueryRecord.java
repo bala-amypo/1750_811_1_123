@@ -2,62 +2,64 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "search_queries")
+@Table(name = "search_query_records")
 public class SearchQueryRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @Column(nullable = false)
+    private Long searcherId;   // ✅ THIS WAS MISSING
 
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private String skillsRequested;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "search_query_skills",
-            joinColumns = @JoinColumn(name = "query_id")
-    )
-    @Column(name = "skill")
-    private List<String> skills;
+    private Integer resultsCount = 0;
 
-    // ✅ REQUIRED: no-arg constructor
-    public SearchQueryRecord() {}
+    private LocalDateTime searchedAt;
 
-    // ✅ GETTERS & SETTERS (THIS FIXES YOUR ERROR)
+    @PrePersist
+    public void onCreate() {
+        this.searchedAt = LocalDateTime.now();
+        if (this.resultsCount == null) {
+            this.resultsCount = 0;
+        }
+    }
+
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getSearcherId() {
+        return searcherId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public void setSearcherId(Long searcherId) {
+        this.searcherId = searcherId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public String getSkillsRequested() {
+        return skillsRequested;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public void setSkillsRequested(String skillsRequested) {
+        this.skillsRequested = skillsRequested;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public Integer getResultsCount() {
+        return resultsCount;
     }
 
-    public List<String> getSkills() {
-        return skills;
+    public void setResultsCount(Integer resultsCount) {
+        this.resultsCount = resultsCount;
     }
 
-    public void setSkills(List<String> skills) {
-        this.skills = skills;
+    public LocalDateTime getSearchedAt() {
+        return searchedAt;
     }
 }
