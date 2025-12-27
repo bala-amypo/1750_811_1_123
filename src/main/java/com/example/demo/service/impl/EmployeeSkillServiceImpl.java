@@ -33,10 +33,6 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        if (!employee.isActive()) {
-            throw new RuntimeException("Employee is inactive");
-        }
-
         Skill skill = skillRepository.findById(skillId)
                 .orElseThrow(() -> new RuntimeException("Skill not found"));
 
@@ -49,22 +45,28 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     }
 
     @Override
-    public void deactivateEmployeeSkill(Long employeeSkillId) {
-
-        EmployeeSkill employeeSkill = employeeSkillRepository.findById(employeeSkillId)
-                .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
-
-        employeeSkill.setActive(false);
-        employeeSkillRepository.save(employeeSkill);
+    public List<EmployeeSkill> getSkillsForEmployee(Long employeeId) {
+        return employeeSkillRepository.findByEmployeeId(employeeId)
+                .stream()
+                .filter(EmployeeSkill::isActive)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Employee> getEmployeesBySkill(Long skillId) {
-
         return employeeSkillRepository.findBySkillId(skillId)
                 .stream()
                 .filter(EmployeeSkill::isActive)
                 .map(EmployeeSkill::getEmployee)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deactivateEmployeeSkill(Long employeeSkillId) {
+        EmployeeSkill employeeSkill = employeeSkillRepository.findById(employeeSkillId)
+                .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
+
+        employeeSkill.setActive(false);
+        employeeSkillRepository.save(employeeSkill);
     }
 }
