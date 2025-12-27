@@ -10,4 +10,7 @@ public interface EmployeeSkillRepository extends JpaRepository<EmployeeSkill, Lo
     List<EmployeeSkill> findByEmployeeId(Long employeeId);
 
     List<EmployeeSkill> findBySkillId(Long skillId);
+
+    List<EmployeeSkill> findBySkillIdIn(List<Long> skillIds);
 }
+

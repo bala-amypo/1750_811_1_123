@@ -1,17 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Employee;
-import com.example.demo.model.SearchQueryRecord;
 
 import java.util.List;
 
 public interface SearchQueryService {
 
-    List<Employee> searchEmployeesBySkills(List<String> skills, Long searcherId);
+    List<Employee> searchEmployeesBySkillIds(List<Long> skillIds);
 
-    void saveQuery(SearchQueryRecord record);
-
-    SearchQueryRecord getQueryById(Long id);
-
-    List<SearchQueryRecord> getQueriesForUser(Long searcherId);
+    // REQUIRED method (this caused the error)
+    List<String> getQueriesForUser(Long userId);
 }

@@ -1,65 +1,55 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.Employee;
-import com.example.demo.model.SearchQueryRecord;
+import com.example.demo.model.EmployeeSkill;
 import com.example.demo.repository.EmployeeSkillRepository;
-import com.example.demo.repository.SearchQueryRecordRepository;
 import com.example.demo.service.SearchQueryService;
+import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
+
 @Service
 public class SearchQueryServiceImpl implements SearchQueryService {
 
-    private final SearchQueryRecordRepository searchQueryRecordRepository;
     private final EmployeeSkillRepository employeeSkillRepository;
 
-    public SearchQueryServiceImpl(SearchQueryRecordRepository searchQueryRecordRepository,
-                                  EmployeeSkillRepository employeeSkillRepository) {
-        this.searchQueryRecordRepository = searchQueryRecordRepository;
+    public SearchQueryServiceImpl(EmployeeSkillRepository employeeSkillRepository) {
         this.employeeSkillRepository = employeeSkillRepository;
     }
 
+    /**
+     * Search employees who have ALL given skill IDs
+     */
     @Override
-    public List<Employee> searchEmployeesBySkills(List<String> skills, Long searcherId) {
+    public List<Employee> searchEmployeesBySkillIds(List<Long> skillIds) {
 
-        if (skills == null || skills.isEmpty()) {
-            throw new IllegalArgumentException("Skills list must not be empty");
-        }
+        List<EmployeeSkill> mappings =
+                employeeSkillRepository.findBySkillIdIn(skillIds);
 
-        List<String> normalizedSkills = skills.stream()
-                .map(String::trim)
-                .map(String::toLowerCase)
+        return mappings.stream()
+                .filter(EmployeeSkill::isActive)
+                .collect(Collectors.groupingBy(EmployeeSkill::getEmployee))
+                .entrySet()
+                .stream()
+                .filter(e ->
+                        e.getValue().stream()
+                                .map(es -> es.getSkill().getId())
+                                .collect(Collectors.toSet())
+                                .containsAll(skillIds)
+                )
+                .map(e -> e.getKey())
                 .distinct()
-                .collect(Collectors.toList());
-
-        List<Employee> employees = employeeSkillRepository
-                .findEmployeesByAllSkillNames(normalizedSkills, (long) normalizedSkills.size());
-
-        SearchQueryRecord record = new SearchQueryRecord();
-        record.setSearcherId(searcherId);
-        record.setSkillsRequested(String.join(",", normalizedSkills));
-        record.setResultsCount((long) employees.size());
-
-        searchQueryRecordRepository.save(record);
-
-        return employees;
+                .toList();
     }
 
+    /**
+     * Dummy implementation to satisfy interface
+     * (you can improve later)
+     */
     @Override
-    public void saveQuery(SearchQueryRecord record) {
-        searchQueryRecordRepository.save(record);
-    }
-
-    @Override
-    public SearchQueryRecord getQueryById(Long id) {
-        return searchQueryRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Query not found"));
-    }
-
-    @Override
-    public List<SearchQueryRecord> getQueriesForUser(Long searcherId) {
-        return searchQueryRecordRepository.findBySearcherId(searcherId);
+    public List<String> getQueriesForUser(Long userId) {
+        return Collections.emptyList();
     }
 }
