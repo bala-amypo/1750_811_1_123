@@ -10,6 +10,7 @@ import com.example.demo.service.EmployeeSkillService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
@@ -26,44 +27,34 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     }
 
     @Override
-    public EmployeeSkill createEmployeeSkill(EmployeeSkill employeeSkill) {
+    public EmployeeSkill addSkillToEmployee(Long employeeId, Long skillId, int level) {
 
-        Employee employee = employeeRepository.findById(employeeSkill.getEmployee().getId())
+        Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        Skill skill = skillRepository.findById(employeeSkill.getSkill().getId())
+        // ✅ Correct boolean getter
+        if (!employee.isActive()) {
+            throw new RuntimeException("Employee is inactive");
+        }
+
+        Skill skill = skillRepository.findById(skillId)
                 .orElseThrow(() -> new RuntimeException("Skill not found"));
 
-        if (!employee.getActive()) {
-            throw new IllegalArgumentException("inactive employee");
-        }
-
-        if (!skill.getActive()) {
-            throw new IllegalArgumentException("inactive skill");
-        }
-
-        employeeSkill.validate();
-        employeeSkill.setActive(true);
+        EmployeeSkill employeeSkill = new EmployeeSkill();
+        employeeSkill.setEmployee(employee);
+        employeeSkill.setSkill(skill);
+        employeeSkill.setLevel(level);
 
         return employeeSkillRepository.save(employeeSkill);
     }
 
     @Override
-    public List<EmployeeSkill> getSkillsForEmployee(Long employeeId) {
-        return employeeSkillRepository.findByEmployeeIdAndActiveTrue(employeeId);
+    public List<EmployeeSkill> getSkillsByEmployee(Long employeeId) {
+        return employeeSkillRepository.findByEmployeeId(employeeId);
     }
 
     @Override
-    public List<EmployeeSkill> getEmployeesBySkill(Long skillId) {
-        return employeeSkillRepository.findBySkillIdAndActiveTrue(skillId);
-    }
-
-    @Override
-    public void deactivateEmployeeSkill(Long employeeSkillId) {
-        EmployeeSkill es = employeeSkillRepository.findById(employeeSkillId)
-                .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
-
-        es.setActive(false);
-        employeeSkillRepository.save(es);
+    public void removeSkillFromEmployee(Long employeeSkillId) {
+        employeeSkillRepository.deleteById(employeeSkillId);
     }
 }
