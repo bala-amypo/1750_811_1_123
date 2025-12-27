@@ -9,8 +9,6 @@ import com.example.demo.repository.SkillRepository;
 import com.example.demo.service.EmployeeSkillService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
@@ -27,12 +25,11 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     }
 
     @Override
-    public EmployeeSkill addSkillToEmployee(Long employeeId, Long skillId, int level) {
+    public EmployeeSkill addEmployeeSkill(Long employeeId, Long skillId) {
 
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        // ✅ Correct boolean getter
         if (!employee.isActive()) {
             throw new RuntimeException("Employee is inactive");
         }
@@ -43,18 +40,18 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
         EmployeeSkill employeeSkill = new EmployeeSkill();
         employeeSkill.setEmployee(employee);
         employeeSkill.setSkill(skill);
-        employeeSkill.setLevel(level);
+        employeeSkill.setActive(true);
 
         return employeeSkillRepository.save(employeeSkill);
     }
 
     @Override
-    public List<EmployeeSkill> getSkillsByEmployee(Long employeeId) {
-        return employeeSkillRepository.findByEmployeeId(employeeId);
-    }
+    public void deactivateEmployeeSkill(Long id) {
 
-    @Override
-    public void removeSkillFromEmployee(Long employeeSkillId) {
-        employeeSkillRepository.deleteById(employeeSkillId);
+        EmployeeSkill employeeSkill = employeeSkillRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
+
+        employeeSkill.setActive(false);
+        employeeSkillRepository.save(employeeSkill);
     }
 }
