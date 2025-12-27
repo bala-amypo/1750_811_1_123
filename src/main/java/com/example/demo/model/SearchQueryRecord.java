@@ -24,8 +24,6 @@ public class SearchQueryRecord {
     @Column(name = "skill")
     private List<String> skills;
 
-    public SearchQueryRecord() {}
-
     // getters & setters
     public Long getId() {
         return id;

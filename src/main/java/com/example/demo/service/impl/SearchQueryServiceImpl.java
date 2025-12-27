@@ -19,7 +19,6 @@ public class SearchQueryServiceImpl implements SearchQueryService {
 
     @Override
     public SearchQueryRecord saveSearch(Long userId, List<String> skills) {
-
         SearchQueryRecord record = new SearchQueryRecord();
         record.setUserId(userId);
         record.setSkills(skills);
