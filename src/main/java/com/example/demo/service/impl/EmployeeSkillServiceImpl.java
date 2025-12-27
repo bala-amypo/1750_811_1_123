@@ -9,6 +9,9 @@ import com.example.demo.repository.SkillRepository;
 import com.example.demo.service.EmployeeSkillService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
@@ -46,12 +49,22 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     }
 
     @Override
-    public void deactivateEmployeeSkill(Long id) {
+    public void deactivateEmployeeSkill(Long employeeSkillId) {
 
-        EmployeeSkill employeeSkill = employeeSkillRepository.findById(id)
+        EmployeeSkill employeeSkill = employeeSkillRepository.findById(employeeSkillId)
                 .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
 
         employeeSkill.setActive(false);
         employeeSkillRepository.save(employeeSkill);
+    }
+
+    @Override
+    public List<Employee> getEmployeesBySkill(Long skillId) {
+
+        return employeeSkillRepository.findBySkillId(skillId)
+                .stream()
+                .filter(EmployeeSkill::isActive)
+                .map(EmployeeSkill::getEmployee)
+                .collect(Collectors.toList());
     }
 }

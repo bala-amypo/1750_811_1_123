@@ -10,43 +10,21 @@ public class EmployeeSkill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "skill_id")
     private Skill skill;
 
     @Column(nullable = false)
-    private String proficiencyLevel;
+    private boolean active = true;
 
-    @Column(nullable = false)
-    private Integer yearsOfExperience;
-
-    private Boolean active = true;
-
-    // Business validation helpers (used in Service layer)
-    public void validate() {
-        if (yearsOfExperience < 0) {
-            throw new IllegalArgumentException("Experience years must be positive");
-        }
-
-        if (!proficiencyLevel.equalsIgnoreCase("Beginner") &&
-            !proficiencyLevel.equalsIgnoreCase("Intermediate") &&
-            !proficiencyLevel.equalsIgnoreCase("Advanced")) {
-            throw new IllegalArgumentException("Invalid proficiency");
-        }
-    }
-
-    // Getters & Setters
+    // ✅ REQUIRED GETTERS & SETTERS
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Employee getEmployee() {
@@ -65,27 +43,12 @@ public class EmployeeSkill {
         this.skill = skill;
     }
 
-    public String getProficiencyLevel() {
-        return proficiencyLevel;
-    }
-
-    public void setProficiencyLevel(String proficiencyLevel) {
-        this.proficiencyLevel = proficiencyLevel;
-    }
-
-    public Integer getYearsOfExperience() {
-        return yearsOfExperience;
-    }
-
-    public void setYearsOfExperience(Integer yearsOfExperience) {
-        this.yearsOfExperience = yearsOfExperience;
-    }
-
-    public Boolean getActive() {
+    // 🔥 THIS FIXES THE ERROR
+    public boolean isActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 }
