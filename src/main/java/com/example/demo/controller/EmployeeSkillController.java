@@ -16,27 +16,31 @@ public class EmployeeSkillController {
         this.employeeSkillService = employeeSkillService;
     }
 
-    // CREATE employee-skill mapping
     @PostMapping
-    public EmployeeSkill createEmployeeSkill(@RequestBody EmployeeSkill employeeSkill) {
+    public EmployeeSkill create(@RequestBody EmployeeSkill employeeSkill) {
         return employeeSkillService.createEmployeeSkill(employeeSkill);
     }
 
-    // GET skills of an employee
+    @PutMapping("/{id}")
+    public EmployeeSkill update(
+            @PathVariable Long id,
+            @RequestBody EmployeeSkill employeeSkill
+    ) {
+        return employeeSkillService.updateEmployeeSkill(id, employeeSkill);
+    }
+
     @GetMapping("/employee/{employeeId}")
-    public List<EmployeeSkill> getSkillsForEmployee(@PathVariable Long employeeId) {
+    public List<EmployeeSkill> getByEmployee(@PathVariable Long employeeId) {
         return employeeSkillService.getSkillsForEmployee(employeeId);
     }
 
-    // GET employee-skills by skill
     @GetMapping("/skill/{skillId}")
-    public List<EmployeeSkill> getEmployeeSkillsBySkill(@PathVariable Long skillId) {
-        return employeeSkillService.getEmployeeSkillsBySkill(skillId);
+    public List<EmployeeSkill> getBySkill(@PathVariable Long skillId) {
+        return employeeSkillService.getEmployeesBySkill(skillId);
     }
 
-    // DEACTIVATE mapping
     @PutMapping("/{id}/deactivate")
-    public void deactivateEmployeeSkill(@PathVariable Long id) {
+    public void deactivate(@PathVariable Long id) {
         employeeSkillService.deactivateEmployeeSkill(id);
     }
 }

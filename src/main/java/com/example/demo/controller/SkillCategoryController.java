@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/skill-categories")
 public class SkillCategoryController {
 
     private final SkillCategoryService skillCategoryService;
@@ -17,22 +17,27 @@ public class SkillCategoryController {
     }
 
     @PostMapping
-    public SkillCategory createCategory(@RequestBody SkillCategory category) {
+    public SkillCategory create(@RequestBody SkillCategory category) {
         return skillCategoryService.createCategory(category);
     }
 
+    @PutMapping("/{id}")
+    public SkillCategory update(@PathVariable Long id, @RequestBody SkillCategory category) {
+        return skillCategoryService.updateCategory(id, category);
+    }
+
     @GetMapping("/{id}")
-    public SkillCategory getCategory(@PathVariable Long id) {
+    public SkillCategory getById(@PathVariable Long id) {
         return skillCategoryService.getCategoryById(id);
     }
 
     @GetMapping
-    public List<SkillCategory> getAllCategories() {
+    public List<SkillCategory> getAll() {
         return skillCategoryService.getAllCategories();
     }
 
-    @DeleteMapping("/{id}")
-    public void deactivateCategory(@PathVariable Long id) {
+    @PutMapping("/{id}/deactivate")
+    public void deactivate(@PathVariable Long id) {
         skillCategoryService.deactivateCategory(id);
     }
 }
