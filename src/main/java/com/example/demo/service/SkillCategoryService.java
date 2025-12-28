@@ -8,6 +8,8 @@ public interface SkillCategoryService {
 
     SkillCategory createCategory(SkillCategory category);
 
+    SkillCategory updateCategory(Long id, SkillCategory category);
+
     SkillCategory getCategoryById(Long id);
 
     List<SkillCategory> getAllCategories();

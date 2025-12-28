@@ -1,12 +1,14 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SkillCategory;
 import com.example.demo.repository.SkillCategoryRepository;
 import com.example.demo.service.SkillCategoryService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
-@Service
+
+@Service   // ✅ REQUIRED — FIXES BEAN ERROR
 public class SkillCategoryServiceImpl implements SkillCategoryService {
 
     private final SkillCategoryRepository skillCategoryRepository;
@@ -22,9 +24,20 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
     }
 
     @Override
+    public SkillCategory updateCategory(Long id, SkillCategory category) {
+        SkillCategory existing = skillCategoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SkillCategory not found"));
+
+        existing.setCategoryName(category.getCategoryName());
+        existing.setDescription(category.getDescription());
+
+        return skillCategoryRepository.save(existing);
+    }
+
+    @Override
     public SkillCategory getCategoryById(Long id) {
         return skillCategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("SkillCategory not found"));
     }
 
     @Override
@@ -35,7 +48,7 @@ public class SkillCategoryServiceImpl implements SkillCategoryService {
     @Override
     public void deactivateCategory(Long id) {
         SkillCategory category = skillCategoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("SkillCategory not found"));
 
         category.setActive(false);
         skillCategoryRepository.save(category);

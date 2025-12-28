@@ -8,7 +8,7 @@ public interface SkillService {
 
     Skill createSkill(Skill skill);
 
-    Skill updateSkill(Long id, Skill updatedSkill);
+    Skill updateSkill(Long id, Skill skill);
 
     Skill getSkillById(Long id);
 
