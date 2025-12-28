@@ -1,17 +1,18 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 
+import java.security.Key;
 import java.util.Date;
 
-@Component
 public class JwtTokenProvider {
 
-    private final String SECRET = "my-secret-key-my-secret-key-my-secret-key";
-    private final long EXPIRATION = 86400000; // 1 day
+    private static final String SECRET =
+            "my-secret-key-my-secret-key-my-secret-key"; // >= 256 bits
+    private static final long EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
+
+    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String generateToken(Long userId, String email, String role) {
 
@@ -20,23 +21,24 @@ public class JwtTokenProvider {
                 .claim("userId", userId)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
+            getClaims(token);
             return true;
-        } catch (Exception e) {
+        } catch (Exception ex) {
             return false;
         }
     }
 
     public Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET)
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
@@ -46,10 +48,12 @@ public class JwtTokenProvider {
     }
 
     public Long getUserIdFromToken(String token) {
-        return getClaims(token).get("userId", Long.class);
+        Object value = getClaims(token).get("userId");
+        return value == null ? null : Long.valueOf(value.toString());
     }
 
     public String getRoleFromToken(String token) {
-        return getClaims(token).get("role", String.class);
+        Object value = getClaims(token).get("role");
+        return value == null ? null : value.toString();
     }
 }

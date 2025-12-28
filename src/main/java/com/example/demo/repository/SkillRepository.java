@@ -4,8 +4,11 @@ import com.example.demo.model.Skill;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface SkillRepository extends JpaRepository<Skill, Long> {
 
-    Optional<Skill> findByNameIgnoreCase(String name);
+    Optional<Skill> findByName(String name);
+
+    List<Skill> findByActiveTrue();
 }

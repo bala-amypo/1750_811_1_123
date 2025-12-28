@@ -2,54 +2,42 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "search_queries")
+@Table(name = "search_query_records")
 public class SearchQueryRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    private Long searcherId;
 
-    private LocalDateTime createdAt;
+    private String skillsRequested;
 
-    @ElementCollection
-    @CollectionTable(
-            name = "search_query_skills",
-            joinColumns = @JoinColumn(name = "search_query_id")
-    )
-    @Column(name = "skill")
-    private List<String> skills;
+    private Integer resultsCount;
 
-    // getters & setters
-    public Long getId() {
-        return id;
+    private LocalDateTime searchedAt;
+
+    @PrePersist
+    public void onCreate() {
+        this.searchedAt = LocalDateTime.now();
+        if (this.resultsCount == null) {
+            this.resultsCount = 0;
+        }
     }
 
-    public Long getUserId() {
-        return userId;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public Long getSearcherId() { return searcherId; }
+    public void setSearcherId(Long searcherId) { this.searcherId = searcherId; }
 
-    public List<String> getSkills() {
-        return skills;
-    }
+    public String getSkillsRequested() { return skillsRequested; }
+    public void setSkillsRequested(String skillsRequested) { this.skillsRequested = skillsRequested; }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    public Integer getResultsCount() { return resultsCount; }
+    public void setResultsCount(Integer resultsCount) { this.resultsCount = resultsCount; }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setSkills(List<String> skills) {
-        this.skills = skills;
-    }
+    public LocalDateTime getSearchedAt() { return searchedAt; }
 }

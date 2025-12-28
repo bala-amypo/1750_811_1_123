@@ -1,56 +1,40 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "skills",
-       uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(name = "skills")
 public class Skill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String name;
+
+    private String category;
+
+    private String description;
 
     private Boolean active = true;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private SkillCategory category;
+    @OneToMany(mappedBy = "skill")
+    private List<EmployeeSkill> employeeSkills;
 
-    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public String getName() {
-        return name;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public SkillCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(SkillCategory category) {
-        this.category = category;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 }
